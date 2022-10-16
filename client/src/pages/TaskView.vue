@@ -1,5 +1,6 @@
 <template>
   <h1 class="title">Добавить новое техническое задание</h1>
+  <router-link to="/">Главная</router-link>
   <form @submit.prevent="submitForm">
     <div>Основная информация</div>
 
@@ -83,14 +84,14 @@
      Данные электродвигателей
 
      <div class="demo-input-suffix">
-       <el-row :gutter="20">
+       <el-row>
           <el-col :span="6">
-            <span class="ml-3 w-35 text-gray-600 inline-flex items-center">
+            <span>
               Номер электродвигателя
             </span>
           </el-col>
 
-          <el-col :span="2" v-for="index in 6" :key="index">
+          <el-col :span="1" v-for="index in 6" :key="index" class="engine-number">
             <span>
             {{ index }}
           </span>
@@ -100,12 +101,12 @@
 
        <el-row>
          <el-col :span="6">
-          <span class="ml-3 w-35 text-gray-600 inline-flex items-center">
+          <span>
             Мощность, кВт
           </span>
          </el-col>
 
-         <el-col :span="2" v-for="index in 6" :key="index">
+         <el-col :span="1" v-for="index in 6" :key="index">
            <el-input v-model="task.engine_data[0][index]"/>
          </el-col>
 
@@ -113,35 +114,35 @@
 
        <el-row>
          <el-col :span="6">
-          <span class="ml-3 w-35 text-gray-600 inline-flex items-center">
+          <span>
             Напряжение, В
           </span>
          </el-col>
 
-         <el-col :span="2" v-for="index in 6" :key="index">
+         <el-col :span="1" v-for="index in 6" :key="index">
            <el-input v-model="task.engine_data[1][index]"/>
          </el-col>
        </el-row>
 
        <el-row>
          <el-col :span="6">
-          <span class="ml-3 w-35 text-gray-600 inline-flex items-center">
+          <span>
             Номинальный ток, А
           </span>
          </el-col>
 
-         <el-col :span="2" v-for="index in 6" :key="index">
+         <el-col :span="1" v-for="index in 6" :key="index">
            <el-input v-model="task.engine_data[2][index]"/>
          </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="6">
-           <span class="ml-3 w-35 text-gray-600 inline-flex items-center">
+           <span>
             Номинальная частота вращения, об/мин
           </span>
          </el-col>
-          <el-col :span="2" v-for="index in 6" :key="index">
+          <el-col :span="1" v-for="index in 6" :key="index">
            <el-input v-model="task.engine_data[3][index]"/>
          </el-col>
         </el-row>
@@ -173,10 +174,10 @@
    <el-tab-pane label="Управление двигателям">
     Управление двигателям
      <div>
-       <el-radio-group v-model="task.engine_control" size="large" ref="freq" @change="freq_checked">
+       <el-radio-group v-model="task.engine_control" size="large" @change="freq_checked">
           <el-radio-button label="Прямой пуск" name="direct"/>
           <el-radio-button label="Плавный пуск" name="smooth"/>
-          <el-radio-button label="Частотное регулирование" name="frequency"/>
+          <el-radio-button label="Частотное регулирование" ref="freq" name="frequency"/>
              <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">
                  <el-checkbox-button key="one_freq" label="one_freq">
                    Один преобразователь частоты
@@ -280,21 +281,20 @@ export default {
     };
   },
   methods: {
-    test: function () {
-      console.log(this.task.engine_data)
-    },
-
     freq_checked: function () {
       console.log('ok')
-      console.log(this.$refs.freq)
-      if(this.$refs.freq.checked == true) {
+      // let radio = this.$refs.freq.classList
+      // console.log(radio)
+      console.log()
+      if(this.task.engine_control === "Частотное регулирование") {
         console.log('checked')
+      //
         this.disabled_freq = false
       }
       else {
         this.disabled_freq = true
         console.log('non checked')
-        // TODO FIX!!!
+      //   // TODO FIX!!!
       }
     }
   }
@@ -310,6 +310,9 @@ export default {
 
 
 <style>
+
+
+
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
@@ -331,6 +334,8 @@ export default {
 
 .demo-input-suffix {
   font-size: 16px;
+
+
 }
 
 .el-row {
@@ -341,8 +346,20 @@ export default {
 }
 .el-col {
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
+
+.el-row .el-col:first-child {
+  margin-left: 0px;
+}
+
+.engine-number{
+  text-align: center;
+  /*padding-left: 0px ;*/
+  /*padding-right: 0px;*/
+}
+
 
 
 
