@@ -5,45 +5,50 @@
     <div>Основная информация</div>
 
     <div>
- <el-tabs tab-position="left" class="demo-tabs"> <!-- style="height: 400px" -->
+ <el-tabs v-model="tab_number" tab-position="left" class="demo-tabs"> <!-- style="height: 400px" -->
     <el-tab-pane label="Система">
       Система
       <div>
         <el-radio-group v-model="task.system" size="large">
-          <el-radio-button label="Отопление" name="heating"/>
-          <el-radio-button label="Водоснабжение" name="water_supply"/>
-          <el-radio-button label="КНС" name="pumping_station"/>
-          <el-radio-button label="Пожаротушение" name="firefighting"/>
+          <el-radio-button label="heating">Отопление</el-radio-button>
+          <el-radio-button label="water_supply">Водоснабжение</el-radio-button>
+          <el-radio-button label="pumping_station">КНС</el-radio-button>
+          <el-radio-button label="firefighting">Пожаротушение</el-radio-button>
         </el-radio-group>
       </div>
+      <el-button @click="nextTab">Далее</el-button>
     </el-tab-pane>
 
     <el-tab-pane label="Производители">
       Производители
       <div>
         <el-radio-group v-model="task.manufacturer" size="large">
-          <el-radio-button label="DEK" name="dek"/>
-          <el-radio-button label="IEK" name="iek"/>
-          <el-radio-button label="EKF" name="ekf"/>
-          <el-radio-button label="КЭАЗ" name="keaz"/>
+          <el-radio-button label="dek">DEK</el-radio-button>
+          <el-radio-button label="iek">IEK</el-radio-button>
+          <el-radio-button label="ekf">EKF</el-radio-button>
+          <el-radio-button label="keaz">КЭАЗ</el-radio-button>
         </el-radio-group>
       </div>
+      <el-button @click="previousTab">Назад</el-button>
+      <el-button @click="nextTab">Далее</el-button>
     </el-tab-pane>
 
    <el-tab-pane label="Поддерживаемый параметр">
      Поддерживаемый параметр
      <div>
        <el-radio-group v-model="task.sup_parameter" size="large">
-          <el-radio-button label="Давление" name="pressure"/>
-          <el-radio-button label="Температура" name="temperature"/>
-          <el-radio-button label="Расход" name="flow"/>
-          <el-radio-button label="Уровень" name="level"/>
+          <el-radio-button label="pressure">Давление</el-radio-button>
+          <el-radio-button label="temperature">Температура</el-radio-button>
+          <el-radio-button label="flow">Расход</el-radio-button>
+          <el-radio-button label="level">Уровень</el-radio-button>
         </el-radio-group>
      </div>
+     <el-button @click="previousTab">Назад</el-button>
+     <el-button @click="nextTab">Далее</el-button>
    </el-tab-pane>
 
    <el-tab-pane label="Данные о системе">
-     Объем теплоносителя в системе (литр)
+     Объем теплоносителя в системе
 
      <div class="system-data">
        <div>
@@ -107,7 +112,7 @@
          </el-col>
 
          <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[0][index]"/>
+           <el-input v-model="task.engine_data[0][index-1]"/>
          </el-col>
 
        </el-row>
@@ -120,7 +125,7 @@
          </el-col>
 
          <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[1][index]"/>
+           <el-input v-model="task.engine_data[1][index-1]"/>
          </el-col>
        </el-row>
 
@@ -132,7 +137,7 @@
          </el-col>
 
          <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[2][index]"/>
+           <el-input v-model="task.engine_data[2][index-1]"/>
          </el-col>
         </el-row>
 
@@ -143,7 +148,7 @@
           </span>
          </el-col>
           <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[3][index]"/>
+           <el-input v-model="task.engine_data[3][index-1]"/>
          </el-col>
         </el-row>
 
@@ -158,48 +163,110 @@
 
 <!--       </el-radio-group>-->
 <!--     </div>-->
+     <el-button @click="previousTab">Назад</el-button>
+     <el-button @click="nextTab">Далее</el-button>
    </el-tab-pane>
 
    <el-tab-pane label="Параметры шкафа и окружающей среды">
     Параметры шкафа и окружающей среды
      <div>
        <el-radio-group v-model="task.cabinet_parameters" size="large">
-          <el-radio-button label="УХЛ4" name="uhl4"/>
-          <el-radio-button label="УХЛ2" name="uhl2"/>
-          <el-radio-button label="УХЛ1" name="uhl1"/>
+          <el-radio-button label="uhl4">УХЛ4</el-radio-button>
+          <el-radio-button label="uhl2">УХЛ2</el-radio-button>
+          <el-radio-button label="uhl1">УХЛ1</el-radio-button>
         </el-radio-group>
      </div>
+     Размер шкафа
+     <div class="demo-input-suffix">
+       <el-row>
+          <el-col :span="7">
+            <span>
+              Ширина шкафа, мм
+            </span>
+          </el-col>
+
+          <el-col :span="7">
+           <el-input v-model="task.cabinet_width" clearable/>
+         </el-col>
+        </el-row>
+
+       <el-row>
+          <el-col :span="7">
+            <span>
+              Высота шкафа, мм
+            </span>
+          </el-col>
+
+          <el-col :span="7">
+           <el-input v-model="task.cabinet_height" clearable/>
+         </el-col>
+        </el-row>
+
+       <el-row>
+          <el-col :span="7">
+            <span>
+              Глубина шкафа, мм
+            </span>
+          </el-col>
+
+          <el-col :span="7">
+           <el-input v-model="task.cabinet_depth" clearable/>
+         </el-col>
+        </el-row>
+     </div>
+     <el-button @click="previousTab">Назад</el-button>
+     <el-button @click="nextTab">Далее</el-button>
    </el-tab-pane>
 
    <el-tab-pane label="Управление двигателям">
     Управление двигателям
      <div>
        <el-radio-group v-model="task.engine_control" size="large" @change="freq_checked">
-          <el-radio-button label="Прямой пуск" name="direct"/>
-          <el-radio-button label="Плавный пуск" name="smooth"/>
-          <el-radio-button label="Частотное регулирование" ref="freq" name="frequency"/>
-             <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">
+          <el-radio-button label="direct">Прямой пуск</el-radio-button>
+          <el-radio-button label="smooth">Плавный пуск</el-radio-button>
+          <el-radio-button label="frequency" ref="freq">Частотное регулирование</el-radio-button>
+
+         <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">
                  <el-checkbox-button key="one_freq" label="one_freq">
                    Один преобразователь частоты
                  </el-checkbox-button>
                  <el-checkbox-button key="for_each" label="for_each">
                    ПЧ на каждый электродвигатель
                  </el-checkbox-button>
-           </el-checkbox-group>
-        </el-radio-group>
+         </el-checkbox-group>
+       </el-radio-group>
 
      </div>
+     <el-button @click="previousTab">Назад</el-button>
+     <el-button @click="nextTab">Далее</el-button>
    </el-tab-pane>
 
    <el-tab-pane label="Количество вводов питания">
     Количество вводов питания
      <div>
-       <el-radio-group v-model="task.power_input" size="large">
-          <el-radio-button label="Два ввода питания (с АВР)" name="two_power_ats"/>
-          <el-radio-button label="Два ввода питания (без АВР)" name="two_power_noats"/>
-          <el-radio-button label="Один ввод питания" name="one_power"/>
+       <el-radio-group v-model="task.power_inputs" size="large">
+          <el-radio-button label="two_power_ats">Два ввода питания (с АВР)</el-radio-button>
+          <el-radio-button label="two_power_noats">Два ввода питания (без АВР)</el-radio-button>
+          <el-radio-button label="one_power">Один ввод питания</el-radio-button>
         </el-radio-group>
      </div>
+     <el-button @click="previousTab">Назад</el-button>
+     <el-button @click="nextTab">Далее</el-button>
+   </el-tab-pane>
+
+   <el-tab-pane label="Дополнительная информация">
+    Дополнительная информация
+     <div>
+       <el-input
+        v-model="task.add_information"
+        :rows="4"
+        type="textarea"
+        placeholder="Введите комментарий.."
+        clearable
+       />
+     </div>
+     <el-button @click="previousTab">Назад</el-button>
+
    </el-tab-pane>
 
 
@@ -217,17 +284,20 @@
 <!--   </el-tab-pane>-->
   </el-tabs>
     </div>
-
+    <el-button @click="sendData">Отправить</el-button>
   </form>
 
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import axios from "axios";
+
 export default {
   name: "TaskView",
   data(){
     return{
+      tab_number: '0',
       errors: [],
       disabled_pump: true,
       disabled_fan: true,
@@ -235,7 +305,7 @@ export default {
       disabled_gate: true,
       disabled_freq: true,
 
-      choices2 : ['Прямой пуск', 'Плавный пуск', 'Частотное регулирование', 'Один преобразователь частоты', 'ПЧ на каждый электродвигатель'],
+      // choices2 : ['Прямой пуск', 'Плавный пуск', 'Частотное регулирование', 'Один преобразователь частоты', 'ПЧ на каждый электродвигатель'],
       // engine_control_choices: [
       //   {
       //     short: 'direct',
@@ -261,7 +331,7 @@ export default {
 
       task: {
         system: '',
-        manufacturer: ref(''),
+        manufacturer: '',
         sup_parameter: '',
         volume_pump: false,
         volume_pump_mark: '',
@@ -271,31 +341,93 @@ export default {
         volume_smoke_exhauster_mark: '',
         volume_gate_valves: false,
         volume_gate_valves_mark: '',
-        engine_data: [[''], [''], [''], [''], [''], ['']],
+        engine_data: [[''], [''], [''], ['']],
         cabinet_parameters: '',
+        cabinet_width: '',
+        cabinet_height: '',
+        cabinet_depth: '',
         engine_control: '',
         engine_control_freq: [''],
-        power_input: '',
+        one_freq: false,
+        for_each: false,
+        power_inputs: '',
         add_information: '',
       }
     };
   },
   methods: {
     freq_checked: function () {
-      console.log('ok')
-      // let radio = this.$refs.freq.classList
-      // console.log(radio)
-      console.log()
-      if(this.task.engine_control === "Частотное регулирование") {
-        console.log('checked')
-      //
+      if(this.task.engine_control === "frequency") {
         this.disabled_freq = false
       }
       else {
         this.disabled_freq = true
-        console.log('non checked')
-      //   // TODO FIX!!!
       }
+    },
+
+    nextTab: function () {
+      this.tab_number = (parseInt(this.tab_number) + 1).toString()
+    },
+
+    previousTab: function () {
+      this.tab_number = (parseInt(this.tab_number) - 1).toString()
+    },
+
+    async sendData() {
+      // console.log(this.task)
+      if (this.task.engine_control === "frequency") {
+        if (this.task.engine_control_freq.includes('one_freq')) {
+          this.task.one_freq = true
+        } else {
+          this.task.one_freq = false
+        }
+
+        if (this.task.engine_control_freq.includes('for_each')) {
+          this.task.for_each = true
+        } else {
+          this.task.for_each = false
+        }
+      } else {
+        this.task.one_freq = false
+        this.task.for_each = false
+      }
+
+      const data = {
+        'system': this.task.system,
+        'manufacturer': this.task.manufacturer,
+        'sup_parameter': this.task.sup_parameter,
+        'volume_pump': this.task.volume_pump,
+        'volume_pump_mark': this.task.volume_fan_mark,
+        'volume_fan': this.task.volume_fan,
+        'volume_fan_mark': this.task.volume_pump_mark,
+        'volume_smoke_exhauster': this.task.volume_smoke_exhauster,
+        'volume_smoke_exhauster_mark': this.task.volume_smoke_exhauster_mark,
+        'volume_gate_valves': this.task.volume_gate_valves,
+        'volume_gate_valves_mark': this.task.volume_gate_valves_mark,
+        'engine_data': this.task.engine_data,
+        'cabinet_parameters': this.task.cabinet_parameters,
+        'cabinet_width': this.task.cabinet_width,
+        'cabinet_height': this.task.cabinet_height,
+        'cabinet_depth': this.task.cabinet_depth,
+        'engine_control': this.task.engine_control,
+        'test': this.task.engine_control_freq,
+        'one_freq': this.task.one_freq,
+        'for_each': this. task.for_each,
+        'power_inputs': this.task.power_inputs,
+        'add_information': this.task.add_information,
+      }
+      console.log(data)
+      // TODO delete log
+
+      await axios
+        .post('/questionnare/', data)
+        .then(response => {
+          console.log('success')
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
     }
   }
 }

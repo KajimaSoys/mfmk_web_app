@@ -1,19 +1,21 @@
 <template>
-<!--  <nav>-->
-<!--    <router-link to="/">Home</router-link> |-->
-<!--    <router-link to="/about">About</router-link>-->
-<!--  </nav>-->
-<!--  <router-view/>-->
-  <div class="app"> <!--  :style="myStyle"-->
+  <div class="app">
     <div class="main">
       <div class="common-layout">
         <el-container>
-          <el-header>Header</el-header>
+
+          <el-header>
+            <Header/>
+          </el-header>
+
           <el-main>
             <router-view/>
           </el-main>
 
-          <el-footer>Footer</el-footer>
+          <el-footer>
+            <Footer/>
+          </el-footer>
+
         </el-container>
       </div>
     </div>
@@ -21,51 +23,39 @@
 </template>
 
 <script>
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
 export default {
-  // data (){
-  //   return{
-  //     myStyle:{
-  //       backgroundColor:"#16a085"
-  //
-  //     }
-  //   }
-  // }
+  components: {Footer, Header}
 }
 </script>
 
 
 <style>
-.common-layout .el-header, .common-layout .el-footer {
-    background-color: var(--el-color-primary-light-7);
-    color: var(--el-text-color-primary);
-    text-align: center;
-}
-
-/*.common-layout .el-footer{*/
-/*    height:50px;*/
-/*}*/
 * {
   margin: 0;
   padding: 0;
 }
+
 html,
 body {
   height: 100%;
+  /*TODO uncomment this*/
+/*  background: rgb(213,232,255);*/
+/*background: linear-gradient(138deg, rgba(213,232,255,1) 0%, rgba(229,211,255,1) 37%, rgba(238,174,202,1) 100%);*/
 }
-.el-header {
-  position: relative;
-  min-height: 100%;
-}
+
 .el-main {
   padding-bottom: 90px;
 }
-.el-footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 80px;
-}
+/*.el-footer {*/
+/*  position: absolute;*/
+/*  left: 0;*/
+/*  bottom: 0;*/
+/*  width: 100%;*/
+/*  height: 80px;*/
+/*}*/
 
 
 

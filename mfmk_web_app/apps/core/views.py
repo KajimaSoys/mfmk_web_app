@@ -26,4 +26,5 @@ class GroupViewSet(viewsets.ModelViewSet):
 class QuestionnareViewSet(viewsets.ModelViewSet):
     queryset = Questionnaire.objects.all()
     serializer_class = QuestionnareSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []
+    authentication_classes = []

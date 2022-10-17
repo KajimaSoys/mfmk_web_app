@@ -19,6 +19,7 @@ class QuestionnareSerializer(serializers.HyperlinkedModelSerializer):
         model = Questionnaire
         fields = ['id',
                   'system',
+                  'manufacturer',
                   'sup_parameter',
                   'volume_pump',
                   'volume_pump_mark',
@@ -28,7 +29,13 @@ class QuestionnareSerializer(serializers.HyperlinkedModelSerializer):
                   'volume_smoke_exhauster_mark',
                   'volume_gate_valves',
                   'volume_gate_valves_mark',
+                  'engine_data',
                   'cabinet_parameters',
+                  'cabinet_width',
+                  'cabinet_height',
+                  'cabinet_depth',
                   'engine_control',
+                  'one_freq',
+                  'for_each',
                   'power_inputs',
                   'add_information'] #,'engine_data', 'volume', 'volume_mark'

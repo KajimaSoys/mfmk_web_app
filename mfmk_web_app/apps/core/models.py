@@ -22,6 +22,15 @@ class Questionnaire(models.Model):
     )
     system = models.CharField(verbose_name="Система", max_length=30, choices=system_choices)
 
+    manufacturer_choices = (
+        ('dek', 'DEK'),
+        ('iek', 'IEK'),
+        ('ekf', 'EKF'),
+        ('keaz', 'КЭАЗ'),
+    )
+
+    manufacturer = models.CharField(verbose_name="Производитель", max_length=10, choices=manufacturer_choices, blank=True)
+
     sup_parameter_choices = (
         ('pressure', 'Давление'),
         ('temperature', 'Температура'),
@@ -51,12 +60,22 @@ class Questionnaire(models.Model):
     # volume = models.CharField(verbose_name="Объем теплоносителя в системе (литр)", max_length=30, choices=volume_choices, blank=True)
 
     # volume_mark = models.CharField(verbose_name="Маркировка", max_length=50, blank=True)
+    def default_for_first_lvl():
+        return ['','', '', '']
 
-    # engine_data = ArrayField(
-    #     ArrayField(
-    #         models.CharField(max_length=10),
-    #         size=4, blank=True),
-    #     size=6, blank=True)
+    def default_for_second_lvl():
+        return list([
+                ['','', '', '', '', ''],
+                ['','', '', '', '', ''],
+                ['','', '', '', '', ''],
+                ['','', '', '', '', '']
+                     ])
+
+    engine_data = ArrayField(
+        ArrayField(
+            models.CharField(max_length=10),
+            size=6, blank=True),
+        size=4, blank=True, default=default_for_second_lvl)
 
     cabinet_parameters_choices = (
         ('uhl4', 'УХЛ4'),
@@ -64,16 +83,22 @@ class Questionnaire(models.Model):
         ('uhl1', 'УХЛ1'),
     )
     cabinet_parameters = models.CharField(verbose_name="Параметры шкафа и окружающей среды", max_length=15, choices=cabinet_parameters_choices, blank=True)
+    cabinet_width = models.CharField(verbose_name="Ширина шкафа, мм", max_length=10, blank=True)
+    cabinet_height = models.CharField(verbose_name="Высота шкафа, мм", max_length=10, blank=True)
+    cabinet_depth = models.CharField(verbose_name="Глубина шкафа, мм", max_length=10, blank=True)
+
 
     engine_control_choices = (
         ('direct', 'Прямой пуск'),
         ('smooth', 'Плавный пуск'),
         ('frequency', 'Частотное регулирование'),
-        ('one_freq', 'Один преобразователь частоты'),
-        ('for_each', 'ПЧ на каждый электродвигатель'),
+        # ('one_freq', 'Один преобразователь частоты'),
+        # ('for_each', 'ПЧ на каждый электродвигатель'),
     )
     engine_control = models.CharField(verbose_name="Управление двигателями", max_length=30, choices=engine_control_choices, blank=True)
-    #TODO последние два вынести в отдельное поле
+
+    one_freq = models.BooleanField(verbose_name="Один преобразователь частоты", default=False)
+    for_each = models.BooleanField(verbose_name="ПЧ на каждый электродвигатель", default=False)
 
     power_inputs_choices = (
         ('two_power_ats', 'Два ввода питания (с АВР)'),
@@ -81,5 +106,6 @@ class Questionnaire(models.Model):
         ('one_power', 'Один ввод питания'),
     )
     power_inputs = models.CharField(verbose_name="Количество вводов питания", max_length=30, choices=power_inputs_choices, blank=True)
+
 
     add_information = models.TextField(verbose_name="Дополнительные сведения ", blank=True)
