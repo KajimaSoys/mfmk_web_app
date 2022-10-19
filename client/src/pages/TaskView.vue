@@ -1,11 +1,11 @@
 <template>
-  <h1 class="title">Добавить новое техническое задание</h1>
-  <router-link to="/">Главная</router-link>
+<!--  <h1 class="title">Добавить новое техническое задание</h1>-->
+<!--  <router-link to="/">Главная</router-link>-->
   <form @submit.prevent="submitForm">
-    <div>Основная информация</div>
+<!--    <div>Основная информация</div>-->
 
     <div>
- <el-tabs v-model="tab_number" tab-position="left" class="demo-tabs"> <!-- style="height: 400px" -->
+ <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs"> <!-- style="height: 400px" -->
     <el-tab-pane label="Система">
       Система
       <div>
@@ -90,7 +90,7 @@
 
      <div class="demo-input-suffix">
        <el-row>
-          <el-col :span="6">
+          <el-col :span="4">
             <span>
               Номер электродвигателя
             </span>
@@ -105,7 +105,7 @@
 
 
        <el-row>
-         <el-col :span="6">
+         <el-col :span="4">
           <span>
             Мощность, кВт
           </span>
@@ -118,7 +118,7 @@
        </el-row>
 
        <el-row>
-         <el-col :span="6">
+         <el-col :span="4">
           <span>
             Напряжение, В
           </span>
@@ -130,7 +130,7 @@
        </el-row>
 
        <el-row>
-         <el-col :span="6">
+         <el-col :span="4">
           <span>
             Номинальный ток, А
           </span>
@@ -142,7 +142,7 @@
         </el-row>
 
         <el-row>
-          <el-col :span="6">
+          <el-col :span="4">
            <span>
             Номинальная частота вращения, об/мин
           </span>
@@ -165,51 +165,55 @@
 <!--     </div>-->
      <el-button @click="previousTab">Назад</el-button>
      <el-button @click="nextTab">Далее</el-button>
+<!--     <el-button @click="sendData">Отправить</el-button>-->
    </el-tab-pane>
 
    <el-tab-pane label="Параметры шкафа и окружающей среды">
     Параметры шкафа и окружающей среды
-     <div>
+     <div class="cabinet_parameters">
        <el-radio-group v-model="task.cabinet_parameters" size="large">
-          <el-radio-button label="uhl4">УХЛ4</el-radio-button>
-          <el-radio-button label="uhl2">УХЛ2</el-radio-button>
-          <el-radio-button label="uhl1">УХЛ1</el-radio-button>
+          <el-radio-button label="uhl4">УХЛ4 (T окружающего воздуха не более +40 °С и не ниже 0 °С, средняя за 24 ч – не более 35 °С)</el-radio-button>
+          <el-radio-button label="uhl2">УХЛ2 (-40 °С; +40 °С под навесом от воздействия осадков и солнечных лучей)</el-radio-button>
+          <el-radio-button label="uhl1">УХЛ1 (-40 °С; +40 °С на открытом воздухе)</el-radio-button>
         </el-radio-group>
      </div>
+
+     <el-divider/>
+
      Размер шкафа
      <div class="demo-input-suffix">
        <el-row>
-          <el-col :span="7">
+          <el-col :span="3">
             <span>
               Ширина шкафа, мм
             </span>
           </el-col>
 
-          <el-col :span="7">
+          <el-col :span="5">
            <el-input v-model="task.cabinet_width" clearable/>
          </el-col>
         </el-row>
 
        <el-row>
-          <el-col :span="7">
+          <el-col :span="3">
             <span>
               Высота шкафа, мм
             </span>
           </el-col>
 
-          <el-col :span="7">
+          <el-col :span="5">
            <el-input v-model="task.cabinet_height" clearable/>
          </el-col>
         </el-row>
 
        <el-row>
-          <el-col :span="7">
+          <el-col :span="3">
             <span>
               Глубина шкафа, мм
             </span>
           </el-col>
 
-          <el-col :span="7">
+          <el-col :span="5">
            <el-input v-model="task.cabinet_depth" clearable/>
          </el-col>
         </el-row>
@@ -256,7 +260,7 @@
 
    <el-tab-pane label="Дополнительная информация">
     Дополнительная информация
-     <div>
+     <div class="additional">
        <el-input
         v-model="task.add_information"
         :rows="4"
@@ -266,7 +270,7 @@
        />
      </div>
      <el-button @click="previousTab">Назад</el-button>
-
+      <el-button @click="sendData">Отправить</el-button>
    </el-tab-pane>
 
 
@@ -284,7 +288,6 @@
 <!--   </el-tab-pane>-->
   </el-tabs>
     </div>
-    <el-button @click="sendData">Отправить</el-button>
   </form>
 
 </template>
@@ -341,7 +344,12 @@ export default {
         volume_smoke_exhauster_mark: '',
         volume_gate_valves: false,
         volume_gate_valves_mark: '',
-        engine_data: [[''], [''], [''], ['']],
+        engine_data: [
+          ['', '', '', '', '', ''],
+          ['', '', '', '', '', ''],
+          ['', '', '', '', '', ''],
+          ['', '', '', '', '', ''],
+        ],
         cabinet_parameters: '',
         cabinet_width: '',
         cabinet_height: '',
@@ -451,10 +459,26 @@ export default {
   font-size: 32px;
   font-weight: 600;
 }
-
-.el-tabs--left .el-tabs__content {
-  height: 100%;
+.el-tabs--bottom .el-tabs__header.is-bottom {
+  position: absolute;
+  /*left: 0;*/
+  width: 98%;
+  bottom: 5rem;
+  padding: 2rem;
+  /*width: 100%;*/
 }
+/*.el-tabs--bottom .el-tabs__item.is-bottom:nth-child(2){*/
+/*  padding-left: 0;*/
+/*}*/
+
+
+.el-tabs__item {
+  /*padding-left: 45px;*/
+  padding-right: 85px;
+}
+/*.el-tabs--bottom .el-tabs__content {*/
+/*  height: 100%;*/
+/*}*/
 
 .system-data .el-checkbox-button__inner {
   width: 120px;
@@ -467,6 +491,23 @@ export default {
 .demo-input-suffix {
   font-size: 16px;
 
+
+}
+
+.cabinet_parameters .el-radio-group {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.cabinet_parameters .el-radio-button__inner {
+  border-left: var(--el-border) !important;
+  border-right: var(--el-border) !important;
+  border-radius: 4px !important;
+}
+
+.cabinet_parameters .el-radio-button__original-radio:checked+.el-radio-button__inner {
+  box-shadow: 0 0 0 0;
+  border-radius: 4px !important;
 
 }
 
@@ -492,7 +533,9 @@ export default {
   /*padding-right: 0px;*/
 }
 
-
+.additional .el-textarea__inner {
+  width: 30%;
+}
 
 
 /*.radio_group {*/
