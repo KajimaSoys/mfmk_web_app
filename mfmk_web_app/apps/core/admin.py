@@ -3,6 +3,8 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.urls import re_path as url
 from .models import *
+from mfmk_web_app import settings
+from django.http import HttpResponse
 
 
 @admin.register(Client)
@@ -43,7 +45,7 @@ class QuestionnareAdmin(admin.ModelAdmin):
 
     def account_actions(self, obj):
         return format_html(
-            '<a href="{}">Скачать</a>',
+            '<a class="button" href="{}">Скачать</a>',
             reverse('admin:generate_pdf', args=[obj.pk]),
         )
 
@@ -51,15 +53,16 @@ class QuestionnareAdmin(admin.ModelAdmin):
     account_actions.allow_tags = True
 
     def generate_pdf(self, request, id, *args, **kwargs):
-        pass
         # data = data_format.get_data(uuid)
         # path = waybill_engine.waybill_generate(data)
-        # # file_path = settings.FILE_PATH_FIELD_DIRECTORY + path
+        path = f'{Questionnaire.objects.get(id=id).path}/questionnare_{id}.pdf'
+        # file_path =  path #settings.FILE_PATH_FIELD_DIRECTORY +
         # temp = slugify(path.split('/')[3][:-4])
         #
-        # if os.path.exists(path):
-        #     with open(path, 'rb') as fh:
-        #         response = HttpResponse(fh.read(),
-        #                                 content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        #         response['Content-Disposition'] = 'inline; filename=' + temp + '.xlsx'
-        #         return response
+        print(path)
+        if os.path.exists(path):
+            with open(path, 'rb') as pdf:
+                response = HttpResponse(pdf.read(), content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename=questionnare_' + id + '.pdf'
+                return response
+                pdf.closed

@@ -1,105 +1,207 @@
-from PyPDF2 import PdfReader, PdfWriter
 import pdfrw
 
-INVOICE_TEMPLATE_PATH = '../../../tests/template2.pdf'
-INVOICE_OUTPUT_PATH = '../../../tests/temp.pdf'
+def _text_form(annotation, value):
+    pdfstr = pdfrw.objects.pdfstring.PdfString.encode(value)
+    annotation.update(pdfrw.PdfDict(V=pdfstr, AS=pdfstr))
 
-ANNOT_KEY = '/Annots'           # key for all annotations within a page
-ANNOT_FIELD_KEY = '/T'          # Name of field. i.e. given ID of field
-ANNOT_FORM_type = '/FT'         # Form type (e.g. text/button)
-ANNOT_FORM_button = '/Btn'      # ID for buttons, i.e. a checkbox
-ANNOT_FORM_text = '/Tx'         # ID for textbox
-SUBTYPE_KEY = '/Subtype'
-WIDGET_SUBTYPE_KEY = '/Widget'
+def _checkbox(annotation, value):
+    if value:
+        annotation.update(pdfrw.PdfDict(V=pdfrw.objects.pdfname.BasePdfName('/Yes'), AS=pdfrw.objects.pdfname.BasePdfName('/Yes')))
+    else:
+        if '/V' in annotation:
+            del annotation['/V']
+        if '/AS' in annotation:
+            del annotation['/AS']
 
-# def temp(input_pdf_path, output_pdf_file, data_dict):
-#     template_pdf = pdfrw.PdfReader(input_pdf_path)
+def _field_type(annotation):
+    ft = annotation['/FT']
+    ff = annotation['/Ff']
 
-
-def write_fillable_pdf(input_pdf_path, output_pdf_path, data_dict):
-    template_pdf = pdfrw.PdfReader(input_pdf_path)
-    for Page in template_pdf.pages:
-        if Page[ANNOT_KEY]:
-            for annotation in Page[ANNOT_KEY]:
-
-                if annotation[ANNOT_FIELD_KEY] and annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY :
-                    key = annotation[ANNOT_FIELD_KEY][1:-1] # Remove parentheses
-                    key2 = annotation
-                    # print(key2)
-
-                    if key in data_dict.keys():
-                        if annotation[ANNOT_FORM_type] == ANNOT_FORM_button:
-                            # button field i.e. a checkbox
-                            print(annotation[ANNOT_FORM_type])
-                            annotation.update( pdfrw.PdfDict( V=pdfrw.PdfName(data_dict[key]) , AS=pdfrw.PdfName(data_dict[key]) ))
-                        elif annotation[ANNOT_FORM_type] == ANNOT_FORM_text:
-                            # regular text field
-                            annotation.update( pdfrw.PdfDict( V=data_dict[key], AP=data_dict[key]) )
-    template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-    pdfrw.PdfWriter().write(output_pdf_path, template_pdf)
-    print(key2)
-
-data_dict = {
-    # 'item_1_amount': '123',
-    'Choice1': 'Yes',
-    'Text8': 'Дела блять'}
-    # 'CheckBox2': 'Off'  }
+    if ft == '/Tx':
+        return 'text'
+    if ft == '/Ch':
+        if ff and int(ff) & 1 << 17:  # test 18th bit
+            return 'combo'
+        else:
+            return 'list'
+    if ft == '/Btn':
+        if ff and int(ff) & 1 << 15:  # test 16th bit
+            return 'radio'
+        else:
+            return 'checkbox'
 
 
-if __name__ == '__main__':
-    write_fillable_pdf(INVOICE_TEMPLATE_PATH, INVOICE_OUTPUT_PATH, data_dict)
+def _radio_button(annotation, value):
+    for each in annotation['/Kids']:
+        # determine the export value of each kid
+        keys = each['/AP']['/N'].keys()
+        if ['/Off'] in keys:
+            keys.remove('/Off')
+        export = keys[0]
 
+        if f'/{value}' == export:
+            val_str = pdfrw.objects.pdfname.BasePdfName(f'/{value}')
+        else:
+            val_str = pdfrw.objects.pdfname.BasePdfName(f'/Off')
+        each.update(pdfrw.PdfDict(AS=val_str))
+
+    annotation.update(pdfrw.PdfDict(V=pdfrw.objects.pdfname.BasePdfName(f'/{value}')))
 
 
 
 
+def pdf_form_info(in_pdf):
+    info = []
+    for page in in_pdf.pages:
+        annotations = page['/Annots']
+        if annotations is None:
+            continue
+        for annotation in annotations:
+            choices=None
+            if annotation['/Subtype'] == '/Widget':
+                if not annotation['/T']:
+                    annotation = annotation['/Parent']
+                key = annotation['/T'].to_unicode()
+                ft = _field_type(annotation)
+                value = annotation['/V']
+                if ft =='radio':
+                    # value = value[1:]
+                    choices =[]
+                    for each in annotation['/Kids']:
+                        keys = each['/AP']['/N'].keys()
+                        if not keys[0][1:] in choices:
+                            choices.append(keys[0][1:])
+                elif ft == 'list' or ft=='combo':
+                    choices = [each[1].to_unicode() for each in annotation['/Opt']]
+                    values=[]
+                    for each in annotation['/Opt']:
+                        if each[0] in value:
+                            values.append(each[1].to_unicode())
+                    value=values
+                else:
+                    if value:
+                        value=value.to_unicode()
+                out = dict(name=key, type=ft)
+                if value:
+                    out['value']=value
+                if choices:
+                    out['choices']=choices
+                info.append(out)
+    print(info)
+
+
+
+
+
+def fill_form(in_pdf, data, suffix=None):
+    fillers = {
+               'checkbox': _checkbox,
+               # 'list': _listbox,
+               'text': _text_form,
+               # 'combo': _combobox,
+               'radio': _radio_button}
+    for page in in_pdf.pages:
+        annotations = page['/Annots']
+        if annotations is None:
+            continue
+        for annotation in annotations:
+
+            if annotation['/Subtype'] == '/Widget':
+                if not annotation['/T']:
+                    annotation=annotation['/Parent']
+                key = annotation['/T'].to_unicode()
+                if key in data:
+                    ft = _field_type(annotation)
+                    fillers[ft](annotation, data[key])
+                    if suffix:
+                        new_T=pdfrw.objects.pdfstring.PdfString.encode(key+suffix)
+                        annotation.update(pdfrw.PdfDict(T=new_T))
+        in_pdf.Root.AcroForm.update(
+            pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+    return in_pdf
+
+
+def single_form_fill(in_file, data, out_file):
+    pdf = pdfrw.PdfReader(in_file)
+    out_pdf = fill_form(pdf, data)
+    pdfrw.PdfWriter().write(out_file, out_pdf)
+
+
+def convert_data(instance):
+    data_dict = {
+      'system' :
+            {
+                'heating': '0',
+                'water_supply': '1',
+                'pumping_station': '2',
+                'firefighting': '3',
+            },
+        'sup_parameter':
+            {
+                'pressure': '0',
+                'temperature': '1',
+                'flow': '2',
+                'level': '3',
+            },
+        'cabinet_parameters':
+            {
+                'uhl4': '0',
+                'uhl2': '1',
+                'uhl1': '2',
+            },
+        'engine_control':
+            {
+                'direct': '0',
+                'smooth': '1',
+                'frequency': '2',
+            },
+        'power_inputs':
+            {
+            'two_power_ats': '0',
+            'two_power_noats': '1',
+            'one_power': '2',
+            },
+    }
+
+    data = {
+        'Group2': data_dict['system'][instance.system] if instance.system != '' else '',
+        'Group3': data_dict['sup_parameter'][instance.sup_parameter] if instance.sup_parameter != '' else '',
+        'CheckBox1': instance.volume_pump,
+        'CheckBox2': instance.volume_fan,
+        'CheckBox3': instance.volume_smoke_exhauster,
+        'CheckBox4': instance.volume_gate_valves,
+        'Text8' : instance.volume_pump_mark,
+        'Text9' : instance.volume_fan_mark,
+        'Text10' : instance.volume_smoke_exhauster_mark,
+        'Text11' : instance.volume_gate_valves_mark,
+        'Group4': data_dict['cabinet_parameters'][instance.cabinet_parameters] if instance.cabinet_parameters != '' else '',
+        'Group5': data_dict['engine_control'][instance.engine_control] if instance.engine_control != '' else '',
+        'CheckBox5': instance.one_freq,
+        'CheckBox6': instance.for_each,
+        'Group7': data_dict['power_inputs'][instance.power_inputs] if instance.power_inputs != '' else '',
+        'Text36': instance.add_information,
+    }
+
+    #For engine_data
+    k = 11
+    for i in range(4):
+        for j in range(6):
+            k += 1
+            data[f'Text{k}'] = instance.engine_data[i][j]
+
+    return data
 
 
 def generate_pdf(instance):
-    reader = PdfReader("media/pdf_templates/template.pdf")
-    writer = PdfWriter()
+    in_file = 'media/pdf_templates/template.pdf'
+    out_file = f'{instance.path}/questionnare_{instance.id}.pdf'
 
-    page = reader.pages[0]
-    fields = reader.get_fields()
+    data = convert_data(instance)
 
-    writer.add_page(page)
-
-    writer.update_page_form_field_values(
-        writer.pages[1], {
-            # "Text1": instance.system
-            "Group1" : {
-                '/V': '/0'
-            }
-        }
-    )
-
-    with open(f"{instance.path}/pdf_file.pdf", "wb") as output_stream:
-        writer.write(output_stream)
-
-
-    return True
-
-def main():
-    reader = PdfReader("../../../media/pdf_templates/template3.pdf")
-    writer = PdfWriter()
-
-    print(reader.numPages)
-    page2 = reader.pages[1]
-    print(page2.extractText())
-    fields = reader.get_fields()
-    print(fields)
-
-    writer.add_page(page2)
-    #
-    writer.update_page_form_field_values(
-        writer.pages[0], {
-            # "Text1": instance.system
-            "Group5" : {'/V':'/0'}}
-    )
-    fields = reader.get_fields()
-    print(fields)
-    #
-    with open(f"../../../tests/temp3.pdf", "wb") as output_stream:
-        writer.write(output_stream)
-
-
+    try:
+        single_form_fill(in_file, data, out_file)
+    except Exception as E:
+        print(f"An error occurred: {E}")
+        return False
+    else:
+        return True
