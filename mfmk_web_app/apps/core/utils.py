@@ -154,6 +154,8 @@ def convert_data(instance):
                 'direct': '0',
                 'smooth': '1',
                 'frequency': '2',
+                'one_freq': '3',
+                'for_each': '4',
             },
         'power_inputs':
             {
@@ -165,7 +167,11 @@ def convert_data(instance):
 
     data = {
         'Group2': data_dict['system'][instance.system] if instance.system != '' else '',
-        'Group3': data_dict['sup_parameter'][instance.sup_parameter] if instance.sup_parameter != '' else '',
+        # 'Group3': data_dict['sup_parameter'][instance.sup_parameter] if instance.sup_parameter != '' else '',
+        'CheckBox7': True if 'pressure' in instance.sup_parameter else False,
+        'CheckBox8': True if 'temperature' in instance.sup_parameter else False,
+        'CheckBox9': True if 'flow' in instance.sup_parameter else False,
+        'CheckBox10': True if 'level' in instance.sup_parameter else False,
         'CheckBox1': instance.volume_pump,
         'CheckBox2': instance.volume_fan,
         'CheckBox3': instance.volume_smoke_exhauster,
@@ -176,8 +182,8 @@ def convert_data(instance):
         'Text11' : instance.volume_gate_valves_mark,
         'Group4': data_dict['cabinet_parameters'][instance.cabinet_parameters] if instance.cabinet_parameters != '' else '',
         'Group5': data_dict['engine_control'][instance.engine_control] if instance.engine_control != '' else '',
-        'CheckBox5': instance.one_freq,
-        'CheckBox6': instance.for_each,
+        # 'CheckBox5': instance.one_freq,
+        # 'CheckBox6': instance.for_each,
         'Group7': data_dict['power_inputs'][instance.power_inputs] if instance.power_inputs != '' else '',
         'Text36': instance.add_information,
     }
@@ -194,7 +200,7 @@ def convert_data(instance):
 
 def generate_pdf(instance):
     in_file = 'media/pdf_templates/template.pdf'
-    out_file = f'{instance.path}/questionnare_{instance.id}.pdf'
+    out_file = f'media/questionnare_pdf/id_{instance.id}/questionnare_{instance.id}.pdf'
 
     data = convert_data(instance)
 

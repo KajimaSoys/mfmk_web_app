@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from mfmk_web_app.apps.core.models import Questionnaire
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -15,6 +15,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuestionnareSerializer(serializers.HyperlinkedModelSerializer):
+    sup_parameter = serializers.MultipleChoiceField(choices=Questionnaire.sup_parameter_choices)
     class Meta:
         model = Questionnaire
         fields = ['id',
@@ -35,7 +36,6 @@ class QuestionnareSerializer(serializers.HyperlinkedModelSerializer):
                   'cabinet_height',
                   'cabinet_depth',
                   'engine_control',
-                  'one_freq',
-                  'for_each',
                   'power_inputs',
-                  'add_information'] #,'engine_data', 'volume', 'volume_mark'
+                  'add_information',
+                  'path',]

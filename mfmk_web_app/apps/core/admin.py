@@ -23,8 +23,9 @@ class QuestionnareAdmin(admin.ModelAdmin):
                   'sup_parameter',
                   'cabinet_parameters',
                   'get_size',
-                  'one_freq',
-                  'for_each',
+                  'engine_control',
+                  # 'one_freq',
+                  # 'for_each',
                   # 'power_inputs',
                   'add_information',
                   'account_actions',
@@ -53,13 +54,7 @@ class QuestionnareAdmin(admin.ModelAdmin):
     account_actions.allow_tags = True
 
     def generate_pdf(self, request, id, *args, **kwargs):
-        # data = data_format.get_data(uuid)
-        # path = waybill_engine.waybill_generate(data)
         path = f'{Questionnaire.objects.get(id=id).path}/questionnare_{id}.pdf'
-        # file_path =  path #settings.FILE_PATH_FIELD_DIRECTORY +
-        # temp = slugify(path.split('/')[3][:-4])
-        #
-        print(path)
         if os.path.exists(path):
             with open(path, 'rb') as pdf:
                 response = HttpResponse(pdf.read(), content_type='application/pdf')

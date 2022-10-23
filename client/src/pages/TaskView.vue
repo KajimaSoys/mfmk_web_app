@@ -1,341 +1,517 @@
 <template>
-<!--  <h1 class="title">Добавить новое техническое задание</h1>-->
-<!--  <router-link to="/">Главная</router-link>-->
-  <form @submit.prevent="submitForm">
-<!--    <div>Основная информация</div>-->
+  <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs">
 
-    <div>
- <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs"> <!-- style="height: 400px" -->
-    <el-tab-pane label="Система">
-      Система
-      <div>
-        <el-radio-group v-model="task.system" size="large">
-          <el-radio-button label="heating">Отопление</el-radio-button>
-          <el-radio-button label="water_supply">Водоснабжение</el-radio-button>
-          <el-radio-button label="pumping_station">КНС</el-radio-button>
-          <el-radio-button label="firefighting">Пожаротушение</el-radio-button>
-        </el-radio-group>
+    <el-tab-pane label="Основная информация">
+      <div class="main_info">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="main_ref"
+          :model="task"
+          :rules="rules"
+        >
+          Контактные данные
+
+          <el-form-item label="Организация" prop="entity">
+            <el-input class="w-25" type="text" v-model="task.entity" clearable/>
+          </el-form-item>
+
+           <el-form-item label="ФИО" prop="name">
+             <el-input class="w-25" type="text" v-model="task.name" clearable/>
+           </el-form-item>
+
+           <el-form-item label="Должность" prop="post">
+             <el-input class="w-25" type="text" v-model="task.post" clearable/>
+           </el-form-item>
+
+           <el-form-item label="Email" prop="mail">
+             <el-input class="w-25" type="email" v-model="task.mail" clearable/>
+           </el-form-item>
+
+           <el-form-item label="Контактный телефон" prop="number">
+             <el-input class="w-25" type="text" v-model="task.number" clearable/>
+           </el-form-item>
+
+           <el-form-item label="Город" prop="city">
+             <el-input class="w-25" type="text" v-model="task.city" clearable/>
+           </el-form-item>
+
+           <el-form-item>
+             <el-button type="primary" @click="nextTabValidate($refs.main_ref)">Далее</el-button>
+           </el-form-item>
+        </el-form>
       </div>
-      <el-button @click="nextTab">Далее</el-button>
+    </el-tab-pane>
+
+    <el-tab-pane label="Система">
+
+      <div class="system">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="system_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Система" prop="system">
+            <el-radio-group v-model="task.system" size="large">
+              <el-radio-button label="heating">Отопление</el-radio-button>
+              <el-radio-button label="water_supply">Водоснабжение</el-radio-button>
+              <el-radio-button label="pumping_station">КНС</el-radio-button>
+              <el-radio-button label="firefighting">Пожаротушение</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.system_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-tab-pane>
 
     <el-tab-pane label="Производители">
-      Производители
-      <div>
-        <el-radio-group v-model="task.manufacturer" size="large">
-          <el-radio-button label="dek">DEK</el-radio-button>
-          <el-radio-button label="iek">IEK</el-radio-button>
-          <el-radio-button label="ekf">EKF</el-radio-button>
-          <el-radio-button label="keaz">КЭАЗ</el-radio-button>
-        </el-radio-group>
+
+      <div class="manufacturer">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="manufacturer_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Производители" prop="manufacturer">
+            <el-radio-group v-model="task.manufacturer" size="large">
+              <el-radio-button label="dek">DEK</el-radio-button>
+              <el-radio-button label="iek">IEK</el-radio-button>
+              <el-radio-button label="ekf">EKF</el-radio-button>
+              <el-radio-button label="keaz">КЭАЗ</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+
+
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <el-button @click="previousTab">Назад</el-button>
-      <el-button @click="nextTab">Далее</el-button>
     </el-tab-pane>
 
-   <el-tab-pane label="Поддерживаемый параметр">
-     Поддерживаемый параметр
-     <div>
-       <el-radio-group v-model="task.sup_parameter" size="large">
-          <el-radio-button label="pressure">Давление</el-radio-button>
-          <el-radio-button label="temperature">Температура</el-radio-button>
-          <el-radio-button label="flow">Расход</el-radio-button>
-          <el-radio-button label="level">Уровень</el-radio-button>
-        </el-radio-group>
-     </div>
-     <el-button @click="previousTab">Назад</el-button>
-     <el-button @click="nextTab">Далее</el-button>
-   </el-tab-pane>
+    <el-tab-pane label="Поддерживаемый параметр">
+      <div class="sup_parameter">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="sup_parameter_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Поддерживаемый параметр" prop="sup_parameter">
+            <el-checkbox-group v-model="task.sup_parameter" size="large">
+              <el-checkbox-button v-for="parameter in sup_paramater_choices" :key="parameter.key" :label="parameter.key">
+                {{ parameter.value }}
+              </el-checkbox-button>
+            </el-checkbox-group>
+          </el-form-item>
 
-   <el-tab-pane label="Данные о системе">
-     Объем теплоносителя в системе
-
-     <div class="system-data">
-       <div>
-         <el-checkbox-button v-model="task.volume_pump" @change="disabled_pump = !disabled_pump">
-           Насос
-         </el-checkbox-button>
-
-        <el-input v-model="task.volume_pump_mark" :disabled="disabled_pump" placeholder="Маркировка" clearable />
-       </div>
-
-       <div>
-         <el-checkbox-button v-model="task.volume_fan" @change="disabled_fan = !disabled_fan">
-          Вентилятор
-         </el-checkbox-button>
-
-        <el-input v-model="task.volume_fan_mark" :disabled="disabled_fan" placeholder="Маркировка" clearable/>
-       </div>
-
-        <div>
-          <el-checkbox-button v-model="task.volume_smoke_exhauster" @change="disabled_smoke = !disabled_smoke">
-            Дымосос
-          </el-checkbox-button>
-
-          <el-input v-model="task.volume_smoke_exhauster_mark" :disabled="disabled_smoke" placeholder="Маркировка" clearable/>
-        </div>
-
-       <div>
-         <el-checkbox-button v-model="task.volume_gate_valves" @change="disabled_gate = !disabled_gate">
-          Задвижки
-         </el-checkbox-button>
-
-        <el-input v-model="task.volume_gate_valves_mark" :disabled="disabled_gate" placeholder="Маркировка" clearable/>
-       </div>
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
       </div>
+    </el-tab-pane>
 
-     <el-divider/>
+    <el-tab-pane label="Данные о системе">
+      <div class="system_data">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="engine_data_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Объем теплоносителя в системе">
+              <div class="system_data_element">
+                <el-checkbox-button v-model="task.volume_pump" @change="disabled_pump = !disabled_pump">
+                  Насос
+                </el-checkbox-button>
 
-     Данные электродвигателей
+                <el-input v-model="task.volume_pump_mark" :disabled="disabled_pump" placeholder="Маркировка" clearable />
+              </div>
 
-     <div class="demo-input-suffix">
-       <el-row>
-          <el-col :span="4">
-            <span>
-              Номер электродвигателя
-            </span>
-          </el-col>
+              <div class="system_data_element">
+                <el-checkbox-button v-model="task.volume_fan" @change="disabled_fan = !disabled_fan">
+                  Вентилятор
+                </el-checkbox-button>
 
-          <el-col :span="1" v-for="index in 6" :key="index" class="engine-number">
-            <span>
-            {{ index }}
-          </span>
-          </el-col>
-        </el-row>
+                <el-input v-model="task.volume_fan_mark" :disabled="disabled_fan" placeholder="Маркировка" clearable/>
+              </div>
 
+              <div class="system_data_element">
+                <el-checkbox-button v-model="task.volume_smoke_exhauster" @change="disabled_smoke = !disabled_smoke">
+                  Дымосос
+                </el-checkbox-button>
 
-       <el-row>
-         <el-col :span="4">
-          <span>
-            Мощность, кВт
-          </span>
-         </el-col>
+                <el-input v-model="task.volume_smoke_exhauster_mark" :disabled="disabled_smoke" placeholder="Маркировка" clearable/>
+              </div>
 
-         <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[0][index-1]"/>
-         </el-col>
+              <div class="system_data_element">
+                <el-checkbox-button v-model="task.volume_gate_valves" @change="disabled_gate = !disabled_gate">
+                  Задвижки
+                </el-checkbox-button>
 
-       </el-row>
+                <el-input v-model="task.volume_gate_valves_mark" :disabled="disabled_gate" placeholder="Маркировка" clearable/>
+              </div>
+          </el-form-item>
 
-       <el-row>
-         <el-col :span="4">
-          <span>
-            Напряжение, В
-          </span>
-         </el-col>
+          <el-divider/>
 
-         <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[1][index-1]"/>
-         </el-col>
-       </el-row>
+          <el-form-item label="Данные электродвигателей" prop="engine_data">
+            <div class="demo-input-suffix">
+              <el-row>
+                <el-col :span="5">
+                  <span>
+                    Номер электродвигателя
+                  </span>
+                </el-col>
 
-       <el-row>
-         <el-col :span="4">
-          <span>
-            Номинальный ток, А
-          </span>
-         </el-col>
+                <el-col :span="2" v-for="index in 6" :key="index" class="engine-number">
+                  <span>
+                    {{ index }}
+                  </span>
+                </el-col>
+              </el-row>
 
-         <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[2][index-1]"/>
-         </el-col>
-        </el-row>
+              <el-row>
+                <el-col :span="5">
+                  <span>
+                    Мощность, кВт
+                  </span>
+                </el-col>
 
-        <el-row>
-          <el-col :span="4">
-           <span>
-            Номинальная частота вращения, об/мин
-          </span>
-         </el-col>
-          <el-col :span="1" v-for="index in 6" :key="index">
-           <el-input v-model="task.engine_data[3][index-1]"/>
-         </el-col>
-        </el-row>
+                <el-col :span="2" v-for="index in 6" :key="index">
+                  <template v-if="index==1">
+                    <el-form-item class="zero_margin"
+                                  :prop="'engine_data.0.0'"
+                                  :rules="{required: true, trigger: 'blur',}" :show-message=show_message>
+                      <el-input v-model="task.engine_data[0][index-1]"/>
+                    </el-form-item>
+                  </template>
+                  <template v-else>
+                    <el-input v-model="task.engine_data[0][index-1]"/>
+                  </template>
+                </el-col>
+              </el-row>
 
+              <el-row>
+                <el-col :span="5">
+                  <span>
+                    Напряжение, В
+                  </span>
+                </el-col>
+
+                <el-col :span="2" v-for="index in 6" :key="index">
+                  <el-input v-model="task.engine_data[1][index-1]"/>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="5">
+                  <span>
+                    Номинальный ток, А
+                  </span>
+                </el-col>
+
+                 <el-col :span="2" v-for="index in 6" :key="index">
+                   <el-input v-model="task.engine_data[2][index-1]"/>
+                 </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="5">
+                  <span>
+                    Номинальная частота вращения, об/мин
+                  </span>
+                </el-col>
+                  <el-col :span="2" v-for="index in 6" :key="index">
+                    <el-input v-model="task.engine_data[3][index-1]"/>
+                  </el-col>
+              </el-row>
+            </div>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
       </div>
+    </el-tab-pane>
 
-<!--     <div>-->
-<!--       <el-radio-group v-model="engine_data" size="large" class="radio_group">-->
-<!--          <el-radio-button label="Насос" name="pump"/>-->
-<!--          <el-radio-button label="Вентилятор" name="fan"/>-->
-<!--          <el-radio-button label="Дымосос" name="smoke_exhauster"/>-->
-<!--          <el-radio-button label="Задвижки" name="gate_valves"/>-->
+    <el-tab-pane label="Параметры шкафа и окружающей среды">
+      <div class="cabinet_parameters">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="cabinet_parameters_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item class="big_text" label="Параметры шкафа и окружающей среды">
+            <el-radio-group v-model="task.cabinet_parameters" size="large">
+              <el-radio-button label="uhl4">УХЛ4 (T окружающего воздуха не более +40 °С и не ниже 0 °С, средняя за 24 ч – не более 35 °С)</el-radio-button>
+              <el-radio-button label="uhl2">УХЛ2 (-40 °С; +40 °С под навесом от воздействия осадков и солнечных лучей)</el-radio-button>
+              <el-radio-button label="uhl1">УХЛ1 (-40 °С; +40 °С на открытом воздухе)</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
 
-<!--       </el-radio-group>-->
-<!--     </div>-->
-     <el-button @click="previousTab">Назад</el-button>
-     <el-button @click="nextTab">Далее</el-button>
-<!--     <el-button @click="sendData">Отправить</el-button>-->
-   </el-tab-pane>
+         <el-divider/>
 
-   <el-tab-pane label="Параметры шкафа и окружающей среды">
-    Параметры шкафа и окружающей среды
-     <div class="cabinet_parameters">
-       <el-radio-group v-model="task.cabinet_parameters" size="large">
-          <el-radio-button label="uhl4">УХЛ4 (T окружающего воздуха не более +40 °С и не ниже 0 °С, средняя за 24 ч – не более 35 °С)</el-radio-button>
-          <el-radio-button label="uhl2">УХЛ2 (-40 °С; +40 °С под навесом от воздействия осадков и солнечных лучей)</el-radio-button>
-          <el-radio-button label="uhl1">УХЛ1 (-40 °С; +40 °С на открытом воздухе)</el-radio-button>
-        </el-radio-group>
-     </div>
+         <el-form-item class="big_text" label="Размер шкафа"/>
 
-     <el-divider/>
+          <el-form-item label="Ширина шкафа, мм">
+            <el-input class="w-25" type="text" v-model="task.cabinet_width" clearable/>
+          </el-form-item>
 
-     Размер шкафа
-     <div class="demo-input-suffix">
-       <el-row>
-          <el-col :span="3">
-            <span>
-              Ширина шкафа, мм
-            </span>
-          </el-col>
+          <el-form-item label="Высота шкафа, мм">
+            <el-input class="w-25" type="text" v-model="task.cabinet_height" clearable/>
+          </el-form-item>
 
-          <el-col :span="5">
-           <el-input v-model="task.cabinet_width" clearable/>
-         </el-col>
-        </el-row>
+          <el-form-item label="Гулбина шкафа, мм">
+            <el-input class="w-25" type="text" v-model="task.cabinet_depth" clearable/>
+          </el-form-item>
 
-       <el-row>
-          <el-col :span="3">
-            <span>
-              Высота шкафа, мм
-            </span>
-          </el-col>
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-tab-pane>
 
-          <el-col :span="5">
-           <el-input v-model="task.cabinet_height" clearable/>
-         </el-col>
-        </el-row>
+    <el-tab-pane label="Управление двигателям">
+      <div class="engine_control">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="engine_control_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Управление двигателям" prop="engine_control">
+            <el-radio-group v-model="task.engine_control" size="large">
+              <el-radio-button label="direct">Прямой пуск</el-radio-button>
+              <el-radio-button label="smooth">Плавный пуск</el-radio-button>
+              <el-radio-button label="frequency">Частотное регулирование</el-radio-button>
+              <el-radio-button label="one_freq">Один преобразователь частоты</el-radio-button>
+              <el-radio-button label="for_each">ПЧ на каждый электродвигатель</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
 
-       <el-row>
-          <el-col :span="3">
-            <span>
-              Глубина шкафа, мм
-            </span>
-          </el-col>
+<!--             <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">-->
+<!--                     <el-checkbox-button key="one_freq" label="one_freq">-->
+<!--                       Один преобразователь частоты-->
+<!--                     </el-checkbox-button>-->
+<!--                     <el-checkbox-button key="for_each" label="for_each">-->
+<!--                       ПЧ на каждый электродвигатель-->
+<!--                     </el-checkbox-button>-->
+<!--             </el-checkbox-group>-->
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref)">Далее</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-tab-pane>
 
-          <el-col :span="5">
-           <el-input v-model="task.cabinet_depth" clearable/>
-         </el-col>
-        </el-row>
-     </div>
-     <el-button @click="previousTab">Назад</el-button>
-     <el-button @click="nextTab">Далее</el-button>
-   </el-tab-pane>
+    <el-tab-pane label="Количество вводов питания">
+      <div class="power_inputs">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="power_inputs_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Количество вводов питания" prop="power_inputs">
+            <el-radio-group v-model="task.power_inputs" size="large">
+              <el-radio-button label="two_power_ats">Два ввода питания (с АВР)</el-radio-button>
+              <el-radio-button label="two_power_noats">Два ввода питания (без АВР)</el-radio-button>
+              <el-radio-button label="one_power">Один ввод питания</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
 
-   <el-tab-pane label="Управление двигателям">
-    Управление двигателям
-     <div>
-       <el-radio-group v-model="task.engine_control" size="large" @change="freq_checked">
-          <el-radio-button label="direct">Прямой пуск</el-radio-button>
-          <el-radio-button label="smooth">Плавный пуск</el-radio-button>
-          <el-radio-button label="frequency" ref="freq">Частотное регулирование</el-radio-button>
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.power_inputs)">Далее</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-tab-pane>
 
-         <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">
-                 <el-checkbox-button key="one_freq" label="one_freq">
-                   Один преобразователь частоты
-                 </el-checkbox-button>
-                 <el-checkbox-button key="for_each" label="for_each">
-                   ПЧ на каждый электродвигатель
-                 </el-checkbox-button>
-         </el-checkbox-group>
-       </el-radio-group>
+    <el-tab-pane label="Дополнительная информация">
+      <div class="additional">
+        <el-form
+          label-width="auto"
+          label-position="top"
+          require-asterisk-position="right"
+          status-icon
+          size="large"
+          ref="add_information_ref"
+          :model="task"
+          :rules="rules"
+        >
+          <el-form-item label="Дополнительная информация" prop="add_information">
+            <el-input
+              v-model="task.add_information"
+              :rows="4"
+              type="textarea"
+              placeholder="Введите комментарий.."
+              clearable
+            />
+          </el-form-item>
 
-     </div>
-     <el-button @click="previousTab">Назад</el-button>
-     <el-button @click="nextTab">Далее</el-button>
-   </el-tab-pane>
-
-   <el-tab-pane label="Количество вводов питания">
-    Количество вводов питания
-     <div>
-       <el-radio-group v-model="task.power_inputs" size="large">
-          <el-radio-button label="two_power_ats">Два ввода питания (с АВР)</el-radio-button>
-          <el-radio-button label="two_power_noats">Два ввода питания (без АВР)</el-radio-button>
-          <el-radio-button label="one_power">Один ввод питания</el-radio-button>
-        </el-radio-group>
-     </div>
-     <el-button @click="previousTab">Назад</el-button>
-     <el-button @click="nextTab">Далее</el-button>
-   </el-tab-pane>
-
-   <el-tab-pane label="Дополнительная информация">
-    Дополнительная информация
-     <div class="additional">
-       <el-input
-        v-model="task.add_information"
-        :rows="4"
-        type="textarea"
-        placeholder="Введите комментарий.."
-        clearable
-       />
-     </div>
-     <el-button @click="previousTab">Назад</el-button>
-      <el-button @click="sendData">Отправить</el-button>
-   </el-tab-pane>
-
-
-<!--   <el-tab-pane label="Управление двигателем">-->
-<!--     Поддерживаемый параметр-->
-<!--     <div>-->
-<!--       <el-tree-->
-<!--          :props="props"-->
-<!--          :load="loadNode"-->
-<!--          lazy-->
-<!--          show-checkbox-->
-<!--          @check-change="handleCheckChange"-->
-<!--       />-->
-<!--     </div>-->
-<!--   </el-tab-pane>-->
+          <el-form-item>
+            <el-button @click="previousTab">Назад</el-button>
+            <el-button type="primary" @click="sendData">Отправить</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-tab-pane>
   </el-tabs>
-    </div>
-  </form>
-
 </template>
 
 <script>
 import { ref } from 'vue';
 import axios from "axios";
+import { ElMessage, ElMessageBox } from 'element-plus'
+import {saveAs} from 'file-saver'
+import FormInstance from 'element-plus'
 
 export default {
   name: "TaskView",
   data(){
     return{
+      rules: {
+        entity: {
+          required: true,
+          message: "Поле обязательно для заполнения",
+          trigger: "blur",
+        },
+        name: {
+          required: true,
+          message: "Поле обязательно для заполнения",
+          trigger: "blur",
+        },
+        post: {
+          required: true,
+          message: "Поле обязательно для заполнения",
+          trigger: "blur",
+        },
+        mail: {
+          required: true,
+          message: "Поле обязательно для заполнения",
+          trigger: "blur",
+        },
+        number: {
+          required: true,
+          message: "Поле обязательно для заполнения",
+          trigger: "blur",
+        },
+        system: {
+          required: true,
+          message: "Выберите один из вариантов",
+          trigger: "change",
+        },
+        manufacturer: {
+          required: true,
+          message: "Выберите один из вариантов",
+          trigger: "change",
+        },
+        engine_power: {
+          required: true,
+          trigger: "blur",
+        },
+        engine_control: {
+          required: true,
+          message: "Выберите один из вариантов",
+          trigger: "change",
+        }
+      },
+
+
       tab_number: '0',
-      errors: [],
+
       disabled_pump: true,
       disabled_fan: true,
       disabled_smoke: true,
       disabled_gate: true,
       disabled_freq: true,
+      show_message: false,
 
-      // choices2 : ['Прямой пуск', 'Плавный пуск', 'Частотное регулирование', 'Один преобразователь частоты', 'ПЧ на каждый электродвигатель'],
-      // engine_control_choices: [
-      //   {
-      //     short: 'direct',
-      //     full: 'Прямой пуск',
-      //   },
-      //   {
-      //     short: 'smooth',
-      //     full: 'Плавный пуск',
-      //   },
-      //   {
-      //     short: 'frequency',
-      //     full: 'Частотное регулирование',
-      //   },
-      //   {
-      //     short: 'one_freq',
-      //     full: 'Один преобразователь частоты',
-      //   },
-      //   {
-      //     short: 'for_each',
-      //     full: 'ПЧ на каждый электродвигатель',
-      //   },
-      // ],
+      sup_paramater_choices: [
+        {
+          key: 'pressure',
+          value: 'Давление'
+        },
+        {
+          key: 'temperature',
+          value: 'Температура'
+        },
+        {
+          key: 'flow',
+          value: 'Расход'
+        },
+        {
+          key: 'level',
+          value: 'Уровень'
+        },
+      ],
+
+      download_link: '',
+
 
       task: {
+        entity: '',
+        name: '',
+        post: '',
+        mail: '',
+        number: '',
+        city: '',
+        object_info: '',
+        source: '',
+        source_another: '',
+
+
         system: '',
         manufacturer: '',
-        sup_parameter: '',
+        sup_parameter: [],
         volume_pump: false,
         volume_pump_mark: '',
         volume_fan: false,
@@ -355,23 +531,37 @@ export default {
         cabinet_height: '',
         cabinet_depth: '',
         engine_control: '',
-        engine_control_freq: [''],
-        one_freq: false,
-        for_each: false,
+        engine_control_freq: '',
         power_inputs: '',
         add_information: '',
-      }
+      },
     };
   },
   methods: {
-    freq_checked: function () {
-      if(this.task.engine_control === "frequency") {
-        this.disabled_freq = false
-      }
-      else {
-        this.disabled_freq = true
-      }
+    onSubmit(){},
+    nextTabValidate(ref) {
+      console.log(this.$refs)
+      ref.validate((valid=any) => {
+        if(valid) {
+          this.tab_number = (parseInt(this.tab_number) + 1).toString()
+        } else {
+          console.log("error submit!");
+          return false
+        }
+      })
     },
+
+
+
+
+    // freq_checked: function () {
+    //   if(this.task.engine_control === "frequency") {
+    //     this.disabled_freq = false
+    //   }
+    //   else {
+    //     this.disabled_freq = true
+    //   }
+    // },
 
     nextTab: function () {
       this.tab_number = (parseInt(this.tab_number) + 1).toString()
@@ -400,10 +590,17 @@ export default {
         this.task.for_each = false
       }
 
+      var sup_param_serialized = []
+
+      for (let item in this.task.sup_parameter){
+        sup_param_serialized.push(this.task.sup_parameter[item])
+      }
+
       const data = {
         'system': this.task.system,
         'manufacturer': this.task.manufacturer,
-        'sup_parameter': this.task.sup_parameter,
+        // 'sup_parameter': this.task.sup_parameter.values(),
+        'sup_parameter': sup_param_serialized,
         'volume_pump': this.task.volume_pump,
         'volume_pump_mark': this.task.volume_fan_mark,
         'volume_fan': this.task.volume_fan,
@@ -430,13 +627,46 @@ export default {
       await axios
         .post('/questionnare/', data)
         .then(response => {
-          console.log('success')
+          console.log('Success')
+          this.get_path(response.data.id)
         })
         .catch(error => {
           console.log(error)
         })
 
-    }
+      ElMessageBox.confirm(
+        'Спасибо, Ваша заявка принята! Желаете загрузить опросный лист?',
+        'Успешно',
+      {
+        confirmButtonText: 'Скачать',
+        cancelButtonText: 'Отмена',
+        type: 'success',
+      })
+      .then(() => {
+        return axios({
+          url: this.download_link,
+          method: 'GET',
+          responseType: 'blob',
+
+        }).then(response => {
+          console.log(response)
+          saveAs(new Blob([response.data]), 'questionnare.pdf')
+        })
+    })
+
+    },
+
+    async get_path(id) {
+      await axios
+      .get(`/questionnare/${id}/`)
+      .then(response => {
+        this.download_link = '/' + response.data.path + '/questionnare_' + id + '.pdf'
+        console.log(this.download_link)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
   }
 }
 
@@ -450,15 +680,31 @@ export default {
 
 
 <style>
-
-
-
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
 }
+
+.system .el-form-item__label,
+.manufacturer .el-form-item__label,
+.sup_parameter .el-form-item__label,
+.system_data .el-form-item__label,
+.cabinet_parameters .big_text .el-form-item__label,
+.engine_control .el-form-item__label,
+.power_inputs .el-form-item__label,
+.additional .el-form-item__label {
+  padding-top: 12px;
+  font-size: 32px;
+  font-weight: 600;
+  color: #6b778c;
+}
+
+.el-radio-group {
+  margin-top: 20px;
+}
+
 .el-tabs--bottom .el-tabs__header.is-bottom {
   position: absolute;
   /*left: 0;*/
@@ -474,25 +720,40 @@ export default {
 
 .el-tabs__item {
   /*padding-left: 45px;*/
-  padding-right: 85px;
+  /*padding-right: 85px;*/
+  padding-right: 53px;
 }
 /*.el-tabs--bottom .el-tabs__content {*/
 /*  height: 100%;*/
 /*}*/
 
-.system-data .el-checkbox-button__inner {
+.system_data .el-checkbox-button__inner {
   width: 120px;
 }
 
-.system-data .el-input {
+.system_data .el-input {
   width: 60%;
 }
 
-.demo-input-suffix {
-  font-size: 16px;
-
-
+.system_data .el-form-item__content {
+  margin-top: 30px;
+  display: block;
+  flex-direction: column;
+  align-items: flex-start;
 }
+
+.system_data .zero_margin .el-form-item__content {
+  margin-top: 0px;
+}
+
+/*.marks {*/
+/*  margin-top: 30px;*/
+/*}*/
+
+.system_data_element {
+  width: 40%;
+}
+
 
 .cabinet_parameters .el-radio-group {
   align-items: flex-start;
@@ -511,9 +772,9 @@ export default {
 
 }
 
-.el-row {
-  margin-bottom: 20px;
-}
+/*.el-row {*/
+/*  margin-bottom: 20px;*/
+/*}*/
 .el-row:last-child {
   margin-bottom: 0;
 }
@@ -529,6 +790,7 @@ export default {
 
 .engine-number{
   text-align: center;
+  padding-right: 65px;
   /*padding-left: 0px ;*/
   /*padding-right: 0px;*/
 }

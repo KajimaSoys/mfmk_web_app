@@ -2,6 +2,7 @@ from django.db import models
 import json, os
 from django.contrib.postgres.fields import ArrayField
 from mfmk_web_app.apps.core.utils import *
+from multiselectfield import MultiSelectField
 
 class Client(models.Model):
     class Meta:
@@ -52,7 +53,7 @@ class Questionnaire(models.Model):
         ('flow', 'Расход'),
         ('level', 'Уровень'),
     )
-    sup_parameter = models.CharField(verbose_name="Поддерживаемый параметр", max_length=30, choices=sup_parameter_choices, blank=True)
+    sup_parameter = MultiSelectField(verbose_name="Поддерживаемый параметр", max_length=31, choices=sup_parameter_choices, blank=True)
 
     volume_pump = models.BooleanField(verbose_name="Насос", default=False)
     volume_pump_mark = models.CharField(verbose_name="Маркировка", max_length=100, blank=True)
@@ -66,7 +67,15 @@ class Questionnaire(models.Model):
     volume_gate_valves = models.BooleanField(verbose_name="Задвижки", default=False)
     volume_gate_valves_mark = models.CharField(verbose_name="Маркировка", max_length=100, blank=True)
 
-    engine_data = models.JSONField(verbose_name="Данные электродвигателей", encoder=json.JSONEncoder , decoder=json.JSONDecoder, blank=True)
+    def default_json():
+        return [
+            ['', '', '', '', '', '', ],
+            ['', '', '', '', '', '', ],
+            ['', '', '', '', '', '', ],
+            ['', '', '', '', '', '', ],
+        ]
+
+    engine_data = models.JSONField(verbose_name="Данные электродвигателей", encoder=json.JSONEncoder , decoder=json.JSONDecoder, default=default_json, blank=True)
 
     cabinet_parameters_choices = (
         ('uhl4', 'УХЛ4'),
@@ -83,13 +92,13 @@ class Questionnaire(models.Model):
         ('direct', 'Прямой пуск'),
         ('smooth', 'Плавный пуск'),
         ('frequency', 'Частотное регулирование'),
-        # ('one_freq', 'Один преобразователь частоты'),
-        # ('for_each', 'ПЧ на каждый электродвигатель'),
+        ('one_freq', 'Один преобразователь частоты'),
+        ('for_each', 'ПЧ на каждый электродвигатель'),
     )
-    engine_control = models.CharField(verbose_name="Управление двигателями", max_length=30, choices=engine_control_choices, blank=True)
+    engine_control = models.CharField(verbose_name="Управление двигателями", max_length=50, choices=engine_control_choices, blank=True)
 
-    one_freq = models.BooleanField(verbose_name="Один преобразователь частоты", default=False)
-    for_each = models.BooleanField(verbose_name="ПЧ на каждый электродвигатель", default=False)
+    # one_freq = models.BooleanField(verbose_name="Один преобразователь частоты", default=False)
+    # for_each = models.BooleanField(verbose_name="ПЧ на каждый электродвигатель", default=False)
 
     power_inputs_choices = (
         ('two_power_ats', 'Два ввода питания (с АВР)'),
@@ -114,19 +123,20 @@ class Questionnaire(models.Model):
         path = f'id_{self.id}'
         try:
             os.mkdir(f'media/questionnare_pdf/{path}')
-            print("Directory media/questionnare_pdf/", path, " created!")
+            print(f'media/questionnare_pdf/{path}')
+            print(f"Directory media/questionnare_pdf/{path} created!")
         except FileExistsError:
-            print("Directory media/questionnare_pdf/", path, " already exists")
+            print(f"Directory media/questionnare_pdf/{path} already exists")
 
         Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnare_pdf/{path}')
+
+        if generate_pdf(self):
+            print('Pdf file generated successfully!')
+        else:
+            print('An error occurred while generating the pdf document :(')
 
 
 
     def save(self, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)
         self.update_model()
-
-        if generate_pdf(self):
-            print('Pdf file generated successfully!')
-        else:
-            print('An error occurred while generating the pdf document :(')
