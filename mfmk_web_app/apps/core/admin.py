@@ -12,15 +12,16 @@ class ClientAdmin(admin.ModelAdmin):
     model = Client
 
 @admin.register(Questionnaire)
-class QuestionnareAdmin(admin.ModelAdmin):
+class QuestionnaireAdmin(admin.ModelAdmin):
     model = Questionnaire
 
     Questionnaire.get_size.short_description = 'Размер шкафа (ШxВxГ)'
+    Questionnaire.sup_parameter_translate.short_description = "Поддерживаемый параметр"
 
     list_display = ('id',
                   'system',
                   'manufacturer',
-                  'sup_parameter',
+                  'sup_parameter_translate',
                   'cabinet_parameters',
                   'get_size',
                   'engine_control',
@@ -34,7 +35,7 @@ class QuestionnareAdmin(admin.ModelAdmin):
     exclude = ('path',)
 
     def get_urls(self):
-        urls = super(QuestionnareAdmin, self).get_urls()
+        urls = super(QuestionnaireAdmin, self).get_urls()
         custom_urls = [
             url(
                 r'^(?P<id>.+)/generate_pdf/$',
@@ -54,10 +55,11 @@ class QuestionnareAdmin(admin.ModelAdmin):
     account_actions.allow_tags = True
 
     def generate_pdf(self, request, id, *args, **kwargs):
-        path = f'{Questionnaire.objects.get(id=id).path}/questionnare_{id}.pdf'
+        path = f'{Questionnaire.objects.get(id=id).path}/questionnaire_{id}.pdf'
         if os.path.exists(path):
             with open(path, 'rb') as pdf:
                 response = HttpResponse(pdf.read(), content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=questionnare_' + id + '.pdf'
+                response['Content-Disposition'] = 'attachment; filename=questionnaire_' + id + '.pdf'
                 return response
                 pdf.closed
+

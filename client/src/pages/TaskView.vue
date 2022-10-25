@@ -13,32 +13,68 @@
           :model="task"
           :rules="rules"
         >
-          Контактные данные
+          <div class="contacts">
+            Контактные данные
 
-          <el-form-item label="Организация" prop="entity">
-            <el-input class="w-25" type="text" v-model="task.entity" clearable/>
-          </el-form-item>
+            <el-form-item label="Организация" prop="entity">
+              <el-input class="w-75" type="text" v-model="task.entity" clearable/>
+            </el-form-item>
 
-           <el-form-item label="ФИО" prop="name">
-             <el-input class="w-25" type="text" v-model="task.name" clearable/>
-           </el-form-item>
+            <el-form-item label="ФИО" prop="name">
+              <el-input class="w-75" type="text" v-model="task.name" clearable/>
+            </el-form-item>
 
-           <el-form-item label="Должность" prop="post">
-             <el-input class="w-25" type="text" v-model="task.post" clearable/>
-           </el-form-item>
+            <el-form-item label="Должность" prop="post">
+              <el-input class="w-75" type="text" v-model="task.post" clearable/>
+            </el-form-item>
 
-           <el-form-item label="Email" prop="mail">
-             <el-input class="w-25" type="email" v-model="task.mail" clearable/>
-           </el-form-item>
+            <el-form-item label="Email" prop="mail">
+              <el-input class="w-75" type="email" v-model="task.mail" clearable/>
+            </el-form-item>
 
-           <el-form-item label="Контактный телефон" prop="number">
-             <el-input class="w-25" type="text" v-model="task.number" clearable/>
-           </el-form-item>
+            <el-form-item label="Контактный телефон" prop="number">
+              <el-input class="w-75" type="text" v-model="task.number" clearable/>
+            </el-form-item>
 
-           <el-form-item label="Город" prop="city">
-             <el-input class="w-25" type="text" v-model="task.city" clearable/>
-           </el-form-item>
+            <el-form-item label="Город" prop="city">
+              <el-input class="w-75" type="text" v-model="task.city" clearable/>
+            </el-form-item>
+          </div>
+          <div class="source_info">
+            Основные даныне
 
+            <el-form-item label="Название и расположение объекта" prop="object_info">
+              <el-input
+                class="w-50"
+                v-model="task.object_info"
+                :rows="4"
+                type="textarea"
+                clearable
+              />
+            </el-form-item>
+
+            Как вы о нас узнали?
+
+            <el-form-item prop="source">
+              <el-radio-group v-model="task.source" size="large">
+                <el-radio-button label="ad">Реклама Яндекс / Google</el-radio-button>
+                <el-radio-button label="search">Поиск Яндекс / Google</el-radio-button>
+                <el-radio-button label="social">Социальные сети</el-radio-button>
+                <el-radio-button label="friends">Рекомендации коллег, друзей</el-radio-button>
+                <el-radio-button label="work">Уже знали о нас, работали с нами</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item label="Другое" prop="source_another">
+              <el-input
+                class="w-50"
+                v-model="task.source_another"
+                :rows="4"
+                type="textarea"
+                clearable
+              />
+            </el-form-item>
+          </div>
            <el-form-item>
              <el-button type="primary" @click="nextTabValidate($refs.main_ref)">Далее</el-button>
            </el-form-item>
@@ -369,7 +405,7 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.power_inputs)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref)">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -602,9 +638,9 @@ export default {
         // 'sup_parameter': this.task.sup_parameter.values(),
         'sup_parameter': sup_param_serialized,
         'volume_pump': this.task.volume_pump,
-        'volume_pump_mark': this.task.volume_fan_mark,
+        'volume_pump_mark': this.task.volume_pump_mark,
         'volume_fan': this.task.volume_fan,
-        'volume_fan_mark': this.task.volume_pump_mark,
+        'volume_fan_mark': this.task.volume_fan_mark,
         'volume_smoke_exhauster': this.task.volume_smoke_exhauster,
         'volume_smoke_exhauster_mark': this.task.volume_smoke_exhauster_mark,
         'volume_gate_valves': this.task.volume_gate_valves,
@@ -625,7 +661,7 @@ export default {
       // TODO delete log
 
       await axios
-        .post('/questionnare/', data)
+        .post('/questionnaire/', data)
         .then(response => {
           console.log('Success')
           this.get_path(response.data.id)
@@ -650,7 +686,7 @@ export default {
 
         }).then(response => {
           console.log(response)
-          saveAs(new Blob([response.data]), 'questionnare.pdf')
+          saveAs(new Blob([response.data]), 'questionnaire.pdf')
         })
     })
 
@@ -658,9 +694,9 @@ export default {
 
     async get_path(id) {
       await axios
-      .get(`/questionnare/${id}/`)
+      .get(`/questionnaire/${id}/`)
       .then(response => {
-        this.download_link = '/' + response.data.path + '/questionnare_' + id + '.pdf'
+        this.download_link = '/' + response.data.path + '/questionnaire_' + id + '.pdf'
         console.log(this.download_link)
       })
       .catch(error => {
@@ -687,6 +723,22 @@ export default {
   font-weight: 600;
 }
 
+.contacts {
+  float: left;
+  width: 30%;
+}
+
+.source_info {
+  margin-left: 30%;
+}
+
+/*.contacts, .source_info {*/
+/*  display: inline-block;*/
+/*  width: 45%;*/
+/*  height: 100%;*/
+/*  !*margin: 1em;*!*/
+/*}*/
+
 .system .el-form-item__label,
 .manufacturer .el-form-item__label,
 .sup_parameter .el-form-item__label,
@@ -702,6 +754,10 @@ export default {
 }
 
 .el-radio-group {
+  margin-top: 20px;
+}
+
+.el-checkbox-group {
   margin-top: 20px;
 }
 
@@ -721,7 +777,7 @@ export default {
 .el-tabs__item {
   /*padding-left: 45px;*/
   /*padding-right: 85px;*/
-  padding-right: 53px;
+  padding-right: 52px;
 }
 /*.el-tabs--bottom .el-tabs__content {*/
 /*  height: 100%;*/

@@ -200,7 +200,7 @@ def convert_data(instance):
 
 def generate_pdf(instance):
     in_file = 'media/pdf_templates/template.pdf'
-    out_file = f'media/questionnare_pdf/id_{instance.id}/questionnare_{instance.id}.pdf'
+    out_file = f'media/questionnaire_pdf/id_{instance.id}/questionnaire_{instance.id}.pdf'
 
     data = convert_data(instance)
 

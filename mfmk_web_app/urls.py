@@ -23,7 +23,7 @@ from django.conf import settings
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register('questionnare', views.QuestionnareViewSet)
+router.register('questionnaire', views.QuestionnaireViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

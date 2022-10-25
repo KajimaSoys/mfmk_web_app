@@ -118,17 +118,24 @@ class Questionnaire(models.Model):
             return 'Отсутствуют'
 
 
+    def sup_parameter_translate(self):
+        return str(self.sup_parameter)
+
+
+
+
+
     def update_model(self):
         """Создание директории клиента при сохранении"""
         path = f'id_{self.id}'
         try:
-            os.mkdir(f'media/questionnare_pdf/{path}')
-            print(f'media/questionnare_pdf/{path}')
-            print(f"Directory media/questionnare_pdf/{path} created!")
+            os.mkdir(f'media/questionnaire_pdf/{path}')
+            print(f'media/questionnaire_pdf/{path}')
+            print(f"Directory media/questionnaire_pdf/{path} created!")
         except FileExistsError:
-            print(f"Directory media/questionnare_pdf/{path} already exists")
+            print(f"Directory media/questionnaire_pdf/{path} already exists")
 
-        Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnare_pdf/{path}')
+        Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnaire_pdf/{path}')
 
         if generate_pdf(self):
             print('Pdf file generated successfully!')

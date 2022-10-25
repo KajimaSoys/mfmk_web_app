@@ -14,7 +14,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class QuestionnareSerializer(serializers.HyperlinkedModelSerializer):
+class QuestionnaireSerializer(serializers.HyperlinkedModelSerializer):
     sup_parameter = serializers.MultipleChoiceField(choices=Questionnaire.sup_parameter_choices)
     class Meta:
         model = Questionnaire
