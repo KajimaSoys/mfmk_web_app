@@ -1,34 +1,70 @@
 <template>
+  <div class="main">
+    <div class="sub">
+      Высокотехнологичные решения для инженерных систем
+    </div>
 
-<router-link to="/task-form-1">Составить техническое задание</router-link>
+    <div class="title">
+      Проектирование и производство инженерного оборудования
+    </div>
 
-
-<!--  <div>-->
-<!--    <router-link to="/task-form-1">Составить техническое задание</router-link>-->
-<!--  </div>-->
+    <div class="video_link">
+      <a href="https://youtu.be/o5WDkF6UiRA" target="_blank">Видео о компании</a>
+    </div>
+  </div>
 </template>
 
 <script>
 
-import TaskView from "@/pages/TaskView";
-export default {
-  name: 'Main',
-  components: {TaskView}
-}
+// import TaskView from "@/pages/TaskView";
+// export default {
+//   name: 'Main',
+//   components: {TaskView}
+// }
 </script>
 
+
+
+
+
 <style>
-/*html {*/
-/*  height: 100%;*/
-/*  */
-/*    background: -webkit-linear-gradient( to left top, blue, red);*/
-/*    background: -moz-linear-gradient( to left top, blue, red);*/
-/*    background: -ms-linear-gradient( to left top, blue, red);*/
-/*    background: -o-linear-gradient( to left top, blue, red);*/
-/*    background: linear-gradient( to left top, blue, red);*/
-  /*background: rgb(148,187,233);*/
-/*background: linear-gradient(138deg, rgba(148,187,233,1) 0%, rgba(195,180,217,1) 37%, rgba(238,174,202,1) 100%) no-repeat center center fixed;*/
-/*  background-attachment: fixed;*/
-/*}*/
+.main {
+  padding: 0px 100px;
+}
+
+.sub{
+  margin-top: 150px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 13px;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.title {
+  text-transform: uppercase;
+      font-size: 48px;
+    line-height: 64px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 600;
+  max-width: 450px;
+}
+
+.video_link {
+  margin-top: 50px;
+}
+
+.video_link a {
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 7px 32px 7px;
+  position: absolute;
+}
+
+.video_link a:hover{
+  background-color: #ffffff;
+  color: #000000;
+}
 </style>
 

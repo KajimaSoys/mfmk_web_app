@@ -1,9 +1,11 @@
 <template>
   <div class="app">
-    <div class="main">
       <div class="common-layout">
-        <el-container>
+        <div class="image-box">
+          <img src="../src/images/main-bg.jpg">
+        </div>
 
+        <el-container>
           <el-header>
             <Header/>
           </el-header>
@@ -12,13 +14,12 @@
             <router-view/>
           </el-main>
 
+
           <el-footer>
             <Footer/>
           </el-footer>
-
         </el-container>
       </div>
-    </div>
   </div>
 </template>
 
@@ -41,23 +42,31 @@ export default {
 html,
 body {
   height: 100%;
-  /*TODO uncomment this*/
-/*  background: rgb(213,232,255);*/
-/*background: linear-gradient(138deg, rgba(213,232,255,1) 0%, rgba(229,211,255,1) 37%, rgba(238,174,202,1) 100%);*/
 }
 
 .el-main {
-  padding-bottom: 90px;
+  --el-main-padding: 0px;
 }
 
-/*.--el-color-primary-dark-2 {*/
-/*  color: #337ecc*/
-/*}*/
+.image-box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: -2;
+}
+
+.image-box img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit: cover;
+}
+
 :root {
   --el-color-primary: #000066;
   --el-color-primary-light-3: #f89393;
   --el-button-hover-border-color: #ffffff;
-  /*--el-button-hover-color: ;*/
 }
 
 .el-button--primary:hover{
@@ -69,34 +78,4 @@ body {
 a {
   color: var(--el-color-primary);
 }
-/*.el-footer {*/
-/*  position: absolute;*/
-/*  left: 0;*/
-/*  bottom: 0;*/
-/*  width: 100%;*/
-/*  height: 80px;*/
-/*}*/
-
-
-
-/*#app {*/
-/*  font-family: Avenir, Helvetica, Arial, sans-serif;*/
-/*  -webkit-font-smoothing: antialiased;*/
-/*  -moz-osx-font-smoothing: grayscale;*/
-/*  text-align: center;*/
-/*  color: #2c3e50;*/
-/*}*/
-
-/*nav {*/
-/*  padding: 30px;*/
-/*}*/
-
-/*nav a {*/
-/*  font-weight: bold;*/
-/*  color: #2c3e50;*/
-/*}*/
-
-/*nav a.router-link-exact-active {*/
-/*  color: #42b983;*/
-/*}*/
 </style>

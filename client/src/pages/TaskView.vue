@@ -76,13 +76,13 @@
             </el-form-item>
           </div>
            <el-form-item>
-             <el-button type="primary" @click="nextTabValidate($refs.main_ref, 'system')">Далее</el-button>
+             <el-button type="primary" @click="nextTabValidate($refs.main_ref)">Далее</el-button> <!-- , 'system' -->
            </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Система" :disabled="disabled_tabs.system">
+    <el-tab-pane label="Система"> <!-- :disabled="disabled_tabs.system" -->
 
       <div class="system">
         <el-form
@@ -106,13 +106,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.system_ref, 'manufacturer')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.system_ref)">Далее</el-button> <!-- , 'manufacturer' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Производители" :disabled="disabled_tabs.manufacturer">
+    <el-tab-pane label="Производители"> <!-- :disabled="disabled_tabs.manufacturer" -->
 
       <div class="manufacturer">
         <el-form
@@ -137,13 +137,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref, 'sup_parameter')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref)">Далее</el-button> <!-- , 'sup_parameter' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Поддерживаемый параметр" :disabled="disabled_tabs.sup_parameter">
+    <el-tab-pane label="Поддерживаемый параметр"> <!-- :disabled="disabled_tabs.sup_parameter" -->
       <div class="sup_parameter">
         <el-form
           label-width="auto"
@@ -165,13 +165,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref, 'system_data')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref)">Далее</el-button> <!-- , 'system_data' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Данные о системе" :disabled="disabled_tabs.system_data">
+    <el-tab-pane label="Данные о системе"> <!-- :disabled="disabled_tabs.system_data" -->
       <div class="system_data">
         <el-form
           label-width="auto"
@@ -295,13 +295,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref, 'cabinet_parameters')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref)">Далее</el-button> <!-- , 'cabinet_parameters' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Параметры шкафа и окружающей среды" :disabled="disabled_tabs.cabinet_parameters">
+    <el-tab-pane label="Параметры шкафа и окружающей среды"> <!-- :disabled="disabled_tabs.cabinet_parameters" -->
       <div class="cabinet_parameters">
         <el-form
           label-width="auto"
@@ -339,13 +339,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref, 'engine_control')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref)">Далее</el-button> <!-- , 'engine_control' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Управление двигателям" :disabled="disabled_tabs.engine_control">
+    <el-tab-pane label="Управление двигателям"> <!-- :disabled="disabled_tabs.engine_control" -->
       <div class="engine_control">
         <el-form
           label-width="auto"
@@ -377,13 +377,13 @@
 <!--             </el-checkbox-group>-->
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref, 'power_inputs')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref)">Далее</el-button> <!-- , 'power_inputs' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Количество вводов питания" :disabled="disabled_tabs.power_inputs">
+    <el-tab-pane label="Количество вводов питания"> <!-- :disabled="disabled_tabs.power_inputs" -->
       <div class="power_inputs">
         <el-form
           label-width="auto"
@@ -405,13 +405,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref, 'additional')">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref)">Далее</el-button> <!-- , 'additional' -->
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Дополнительная информация" :disabled="disabled_tabs.additional">
+    <el-tab-pane label="Дополнительная информация"> <!-- :disabled="disabled_tabs.additional" -->
       <div class="additional">
         <el-form
           label-width="auto"
@@ -504,17 +504,17 @@ export default {
 
       tab_number: '0',
 
-      disabled_tabs:
-          {
-            system: true,
-            manufacturer: true,
-            sup_parameter: true,
-            system_data: true,
-            cabinet_parameters: true,
-            engine_control: true,
-            power_inputs: true,
-            additional: true,
-          },
+      // disabled_tabs:
+      //     {
+      //       system: false,
+      //       manufacturer: false,
+      //       sup_parameter: false,
+      //       system_data: false,
+      //       cabinet_parameters: false,
+      //       engine_control: false,
+      //       power_inputs: false,
+      //       additional: false,
+      //     },
 
       disabled_pump: true,
       disabled_fan: true,
@@ -544,7 +544,6 @@ export default {
 
       download_link: '',
 
-
       task: {
         entity: '',
         name: '',
@@ -555,7 +554,6 @@ export default {
         object_info: '',
         source: '',
         source_another: '',
-
 
         system: '',
         manufacturer: '',
@@ -587,11 +585,11 @@ export default {
   },
   methods: {
     onSubmit(){},
-    nextTabValidate(ref, element) {
+    nextTabValidate(ref) { //, element
       console.log(this.$refs)
       ref.validate((valid=any) => {
         if(valid) {
-          this.disabled_tabs[element] = false
+          // this.disabled_tabs[element] = false
           this.tab_number = (parseInt(this.tab_number) + 1).toString()
         } else {
           console.log("error submit!");
@@ -600,23 +598,6 @@ export default {
       })
     },
 
-    form_validate() {
-      console.log(this.tab_number)
-      // console.log(obj)
-      // console.log(obj.$vnode.key)
-    },
-
-
-
-
-    // freq_checked: function () {
-    //   if(this.task.engine_control === "frequency") {
-    //     this.disabled_freq = false
-    //   }
-    //   else {
-    //     this.disabled_freq = true
-    //   }
-    // },
 
     nextTab: function () {
       this.tab_number = (parseInt(this.tab_number) + 1).toString()
@@ -626,108 +607,132 @@ export default {
       this.tab_number = (parseInt(this.tab_number) - 1).toString()
     },
 
+    async check_validate(ref){
+      let bool = false
+      await this.$refs[ref].validate((valid=any) => {
+          if (valid) { bool = true }
+        })
+      return bool
+    },
+
     async sendData() {
-      // for (ref in this.$refs) {
-      //   ref.validate((valid=any) => {
-      //     if (!valid){
-      //       return false
-      //
-      //     }
-      //   })
-      // }
-      // console.log(this.task)
-      if (this.task.engine_control === "frequency") {
-        if (this.task.engine_control_freq.includes('one_freq')) {
-          this.task.one_freq = true
+      let errors = false
+      for (let ref in this.$refs) {
+        let res = await this.check_validate(ref)
+        if (res){
+          console.log(ref + ' валидно')
+        } else {
+          console.log(ref + ' не валидно')
+          let form_tabs_ref = {
+            main_ref: '0',
+            system_ref: '1',
+            manufacturer_ref: '2',
+            sup_parameter_ref: '3',
+            engine_data_ref: '4',
+            cabinet_parameters_ref: '5',
+            engine_control_ref: '6',
+            power_inputs_ref: '7',
+            add_information_ref: '8',
+          }
+          this.tab_number = form_tabs_ref[ref]
+          errors = true
+          break
+          }
+      }
+
+      if (!errors) {
+        if (this.task.engine_control === "frequency") {
+          if (this.task.engine_control_freq.includes('one_freq')) {
+            this.task.one_freq = true
+          } else {
+            this.task.one_freq = false
+          }
+
+          if (this.task.engine_control_freq.includes('for_each')) {
+            this.task.for_each = true
+          } else {
+            this.task.for_each = false
+          }
         } else {
           this.task.one_freq = false
-        }
-
-        if (this.task.engine_control_freq.includes('for_each')) {
-          this.task.for_each = true
-        } else {
           this.task.for_each = false
         }
-      } else {
-        this.task.one_freq = false
-        this.task.for_each = false
+
+        var sup_param_serialized = []
+
+        for (let item in this.task.sup_parameter){
+          sup_param_serialized.push(this.task.sup_parameter[item])
+        }
+
+        const data = {
+          'client': {
+            'entity_name': this.task.entity,
+            'name': this.task.name,
+            'post': this.task.post,
+            'email': this.task.mail,
+            'number': this.task.number,
+            'city': this.task.city,
+          },
+          'main_data': this.task.object_info,
+          'source': this.task.source,
+          'source_another': this.task.source_another,
+          'system': this.task.system,
+          'manufacturer': this.task.manufacturer,
+          // 'sup_parameter': this.task.sup_parameter.values(),
+          'sup_parameter': sup_param_serialized,
+          'volume_pump': this.task.volume_pump,
+          'volume_pump_mark': this.task.volume_pump_mark,
+          'volume_fan': this.task.volume_fan,
+          'volume_fan_mark': this.task.volume_fan_mark,
+          'volume_smoke_exhauster': this.task.volume_smoke_exhauster,
+          'volume_smoke_exhauster_mark': this.task.volume_smoke_exhauster_mark,
+          'volume_gate_valves': this.task.volume_gate_valves,
+          'volume_gate_valves_mark': this.task.volume_gate_valves_mark,
+          'engine_data': this.task.engine_data,
+          'cabinet_parameters': this.task.cabinet_parameters,
+          'cabinet_width': this.task.cabinet_width,
+          'cabinet_height': this.task.cabinet_height,
+          'cabinet_depth': this.task.cabinet_depth,
+          'engine_control': this.task.engine_control,
+          'test': this.task.engine_control_freq,
+          'one_freq': this.task.one_freq,
+          'for_each': this. task.for_each,
+          'power_inputs': this.task.power_inputs,
+          'add_information': this.task.add_information,
+        }
+        // console.log(data)
+
+        await axios
+          .post('/questionnaire/', data)
+          .then(response => {
+            console.log('Success')
+            this.get_path(response.data.id)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+          ElMessageBox.confirm(
+            'Спасибо, Ваша заявка принята! Желаете загрузить опросный лист?',
+            'Успешно',
+            {
+              confirmButtonText: 'Скачать',
+              cancelButtonText: 'Отмена',
+              type: 'success',
+            })
+
+          .then(() => {
+            return axios({
+              url: this.download_link,
+              method: 'GET',
+              responseType: 'blob',
+
+            }).then(response => {
+              console.log(response)
+              saveAs(new Blob([response.data]), 'questionnaire.pdf')
+            })
+          })
       }
-
-      var sup_param_serialized = []
-
-      for (let item in this.task.sup_parameter){
-        sup_param_serialized.push(this.task.sup_parameter[item])
-      }
-
-      const data = {
-        'client': {
-          'entity_name': this.task.entity,
-          'name': this.task.name,
-          'post': this.task.post,
-          'email': this.task.mail,
-          'number': this.task.number,
-          'city': this.task.city,
-        },
-        'main_data': this.task.object_info,
-        'source': this.task.source,
-        'source_another': this.task.source_another,
-        'system': this.task.system,
-        'manufacturer': this.task.manufacturer,
-        // 'sup_parameter': this.task.sup_parameter.values(),
-        'sup_parameter': sup_param_serialized,
-        'volume_pump': this.task.volume_pump,
-        'volume_pump_mark': this.task.volume_pump_mark,
-        'volume_fan': this.task.volume_fan,
-        'volume_fan_mark': this.task.volume_fan_mark,
-        'volume_smoke_exhauster': this.task.volume_smoke_exhauster,
-        'volume_smoke_exhauster_mark': this.task.volume_smoke_exhauster_mark,
-        'volume_gate_valves': this.task.volume_gate_valves,
-        'volume_gate_valves_mark': this.task.volume_gate_valves_mark,
-        'engine_data': this.task.engine_data,
-        'cabinet_parameters': this.task.cabinet_parameters,
-        'cabinet_width': this.task.cabinet_width,
-        'cabinet_height': this.task.cabinet_height,
-        'cabinet_depth': this.task.cabinet_depth,
-        'engine_control': this.task.engine_control,
-        'test': this.task.engine_control_freq,
-        'one_freq': this.task.one_freq,
-        'for_each': this. task.for_each,
-        'power_inputs': this.task.power_inputs,
-        'add_information': this.task.add_information,
-      }
-      console.log(data)
-      // TODO delete log
-
-      await axios
-        .post('/questionnaire/', data)
-        .then(response => {
-          console.log('Success')
-          this.get_path(response.data.id)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-
-      ElMessageBox.confirm(
-        'Спасибо, Ваша заявка принята! Желаете загрузить опросный лист?',
-        'Успешно',
-      {
-        confirmButtonText: 'Скачать',
-        cancelButtonText: 'Отмена',
-        type: 'success',
-      })
-      .then(() => {
-        return axios({
-          url: this.download_link,
-          method: 'GET',
-          responseType: 'blob',
-
-        }).then(response => {
-          console.log(response)
-          saveAs(new Blob([response.data]), 'questionnaire.pdf')
-        })
-    })
-
     },
 
     async get_path(id) {
@@ -743,17 +748,16 @@ export default {
     },
   }
 }
-
-
-
-
-
-
 </script>
 
 
-
 <style>
+.demo-tabs {
+  padding: 20px;
+  background-color: #ffffff;
+  height: 950px;
+}
+
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
@@ -769,13 +773,6 @@ export default {
 .source_info {
   margin-left: 30%;
 }
-
-/*.contacts, .source_info {*/
-/*  display: inline-block;*/
-/*  width: 45%;*/
-/*  height: 100%;*/
-/*  !*margin: 1em;*!*/
-/*}*/
 
 .system .el-form-item__label,
 .manufacturer .el-form-item__label,
@@ -801,24 +798,10 @@ export default {
 
 .el-tabs--bottom .el-tabs__header.is-bottom {
   position: absolute;
-  /*left: 0;*/
   width: 98%;
   bottom: 5rem;
   padding: 2rem;
-  /*width: 100%;*/
 }
-/*.el-tabs--bottom .el-tabs__item.is-bottom:nth-child(2){*/
-/*  padding-left: 0;*/
-/*}*/
-
-
-/*.el-tabs__item {*/
-/*  !*padding-left: 45px;*!*/
-/*  !*padding-right: 85px;*!*/
-/*  padding-right: 52px;*/
-/*}*/
-
-
 
 .system_data .el-checkbox-button__inner {
   width: 120px;
@@ -838,10 +821,6 @@ export default {
 .system_data .zero_margin .el-form-item__content {
   margin-top: 0px;
 }
-
-/*.marks {*/
-/*  margin-top: 30px;*/
-/*}*/
 
 .system_data_element {
   width: 40%;
@@ -865,9 +844,6 @@ export default {
 
 }
 
-/*.el-row {*/
-/*  margin-bottom: 20px;*/
-/*}*/
 .el-row:last-child {
   margin-bottom: 0;
 }
@@ -884,17 +860,10 @@ export default {
 .engine-number{
   text-align: center;
   padding-right: 65px;
-  /*padding-left: 0px ;*/
-  /*padding-right: 0px;*/
 }
 
 .additional .el-textarea__inner {
   width: 30%;
 }
-
-
-/*.radio_group {*/
-/*  vertical-align: middle;*/
-/*}*/
 
 </style>
