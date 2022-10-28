@@ -11,12 +11,15 @@ class Client(models.Model):
 
 
     id = models.BigAutoField(verbose_name="Идентификатор", primary_key=True)
-    entity_name = models.CharField(verbose_name="Организация", max_length=200)
-    name = models.CharField(verbose_name="Фамилия, имя, отчество", max_length=200)
-    post = models.CharField(verbose_name="Должность", max_length=200)
-    email = models.CharField(verbose_name="Email", max_length=200)
-    number = models.CharField(verbose_name="Контактный телефон", max_length=200)
-    city = models.CharField(verbose_name="Город", max_length=200)
+    entity_name = models.CharField(verbose_name="Организация", max_length=200, blank=True)
+    name = models.CharField(verbose_name="Фамилия, имя, отчество", max_length=200, blank=True)
+    post = models.CharField(verbose_name="Должность", max_length=200, blank=True)
+    email = models.CharField(verbose_name="Email", max_length=200, blank=True)
+    number = models.CharField(verbose_name="Контактный телефон", max_length=200, blank=True)
+    city = models.CharField(verbose_name="Город", max_length=200, blank=True)
+
+    def __str__(self):
+        return self.entity_name
 
 
 class Questionnaire(models.Model):
@@ -29,6 +32,8 @@ class Questionnaire(models.Model):
 
     created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="Дата изменения", auto_now=True)
+
+    client = models.ForeignKey(to=Client, verbose_name="Клиент", on_delete=models.CASCADE, blank=True)
 
     system_choices = (
         ('heating', 'Отопление'),
@@ -107,9 +112,29 @@ class Questionnaire(models.Model):
     )
     power_inputs = models.CharField(verbose_name="Количество вводов питания", max_length=30, choices=power_inputs_choices, blank=True)
 
-    add_information = models.TextField(verbose_name="Дополнительные сведения ", blank=True)
+    add_information = models.TextField(verbose_name="Дополнительные сведения", blank=True)
+
+    main_data = models.TextField(verbose_name="Название и расположение объекта", blank=True)
+
+    source_choices = (
+        ('ad', 'Реклама Яндекс / Google'),
+        ('search', 'Поиск Яндекс / Google'),
+        ('social', 'Социальные сети'),
+        ('friends', 'Рекомендации коллег, друзей'),
+        ('work', 'Уже знали о нас, работали с нами'),
+    )
+    source = models.CharField(verbose_name="Как узнали", max_length=50, choices=source_choices, blank=True)
+    source_another = models.TextField(verbose_name="Другое", blank=True)
 
     path = models.CharField(verbose_name="Путь до файла", max_length=50, blank=True)
+
+    def __str__(self):
+        return f'{self.id}' + f' - {self.main_data}' if self.main_data != '' else ''
+
+
+    def get_name(self):
+        return f'{self.id}' + f' - {self.client.entity_name}' #if self.main_data != '' else ''
+
 
     def get_size(self):
         if self.cabinet_width and self.cabinet_height and self.cabinet_depth:
@@ -120,9 +145,6 @@ class Questionnaire(models.Model):
 
     def sup_parameter_translate(self):
         return str(self.sup_parameter)
-
-
-
 
 
     def update_model(self):
@@ -136,12 +158,12 @@ class Questionnaire(models.Model):
             print(f"Directory media/questionnaire_pdf/{path} already exists")
 
         Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnaire_pdf/{path}')
+        # client = Client.objects.get(id=self.client_id)
 
-        if generate_pdf(self):
+        if generate_pdf(self, self.client):
             print('Pdf file generated successfully!')
         else:
             print('An error occurred while generating the pdf document :(')
-
 
 
     def save(self, *args, **kwargs):

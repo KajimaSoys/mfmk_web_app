@@ -1,0 +1,9 @@
+{% extends "admin/submit_line.html" %}
+
+{% block extra-actions %}
+    {% if show_delete_link and original %}
+        <div class="form-group">
+            <a href="../generate_pdf" class="btn btn-outline-primary form-control">Скачать опросный лист</a>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -11,26 +11,55 @@ from django.http import HttpResponse
 class ClientAdmin(admin.ModelAdmin):
     model = Client
 
+    list_display = (
+        'entity_name',
+        'name',
+        'post',
+        'email',
+        'number',
+        'city',
+        'orders',
+    )
+
+    def orders(self, obj):
+        html = ''
+        questionnaire = Questionnaire.objects.filter(client_id=obj.pk)
+        for item in questionnaire:
+            id = item.id
+            main_data = item.main_data
+            template = f'<a class="btn btn-outline-primary" href="../questionnaire/{id}">№{id} - {main_data}</a><p></p>'
+            html = html + template
+        return format_html(html[:-7])
+
+    orders.short_description = 'Заказы'
+    orders.allow_tags = True
+
+
+
 @admin.register(Questionnaire)
 class QuestionnaireAdmin(admin.ModelAdmin):
     model = Questionnaire
 
+
     Questionnaire.get_size.short_description = 'Размер шкафа (ШxВxГ)'
     Questionnaire.sup_parameter_translate.short_description = "Поддерживаемый параметр"
+    Questionnaire.get_name.short_description = "Название"
 
-    list_display = ('id',
-                  'system',
-                  'manufacturer',
-                  'sup_parameter_translate',
-                  'cabinet_parameters',
-                  'get_size',
-                  'engine_control',
-                  # 'one_freq',
-                  # 'for_each',
-                  # 'power_inputs',
-                  'add_information',
-                  'account_actions',
-                  'created_at',)
+    list_display = (
+        'get_name',
+        'system',
+        'manufacturer',
+        'sup_parameter_translate',
+        'cabinet_parameters',
+        'get_size',
+        'engine_control',
+        # 'one_freq',
+        # 'for_each',
+        # 'power_inputs',
+        'add_information',
+        'account_actions',
+        'created_at',
+    )
 
     exclude = ('path',)
 
@@ -47,7 +76,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
 
     def account_actions(self, obj):
         return format_html(
-            '<a class="button" href="{}">Скачать</a>',
+            '<a class="btn btn-outline-primary" href="{}">Скачать</a>',
             reverse('admin:generate_pdf', args=[obj.pk]),
         )
 

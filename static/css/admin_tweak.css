@@ -1,0 +1,24 @@
+.sidebar-collapse .img-square{
+    margin-left: 0.1rem!important;
+}
+
+
+.img-square {
+    opacity: 100!important;
+    box-shadow: none!important;
+
+    float: left;
+    margin-left: 1.5rem!important;
+    margin-right: 1.5rem!important;
+    max-height: 42px!important;
+    height: 42px;
+    width: auto!important;
+}
+
+.brand-link {
+    padding: 0.5125rem 0.5rem;
+}
+
+.login-logo img{
+    height: 100px;
+}

@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +45,101 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'multiselectfield',
-]
+    ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": 'ГК МФМК',
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": 'ГК МФМК',
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": ' ',
+
+    "site_logo": "img/logo.svg",
+
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": "img/logo.svg",
+
+    # Logo to use for login form in dark themes (defaults to login_logo)
+    "login_logo_dark": "img/logo.png",
+
+    # CSS classes that are applied to the logo above
+    "site_logo_classes": "img-square",
+
+    "site_icon": "img/favicon.ico",
+
+    # Welcome text on the login screen
+    "welcome_sign": 'Добро пожаловать в систему управления заказами ГК МФМК',
+
+    # Copyright on the footer
+    "copyright": "MFMK GC",
+
+    "show_ui_builder": False,
+
+    # The model admin to search from the search bar, search bar omitted if excluded
+    # "search_model": "auth.User",
+
+    "changeform_format": "horizontal_tabs",
+    # TOP MENU
+    # "topmenu_links": {
+    #
+    # }
+    "custom_css": "css/admin_tweak.css",
+
+    #SIDE MENU
+
+    "navigation_expanded": True,
+    "hide_models": ['auth.group',],
+
+    "icons": {
+            "auth": "fas fa-users-cog",
+            "auth.user": "fas fa-user",
+            "auth.Group": "fas fa-users",
+            "core": 'fas fa-home',
+    #         "main.contract": 'fas fa-file-alt',
+            "core.client": 'fas fa-child',
+            "core.questionnaire": 'fas fa-briefcase',
+    #         "main.staff": 'fas fa-grin-beam',
+    #         "main.entity": 'fas fa-building',
+    #
+        },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    # "flat_style": True,
+    "navbar_small_text": False,
+    "footer_small_text": True,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-white",
+    "accent": "accent-navy",
+
+    "navbar": "navbar-white",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-light-navy",
+    "sidebar_nav_small_text": True,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    "theme": "cosmo",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-outline-warning",
+        "danger": "btn-outline-danger",
+        "success": "btn-outline-success"
+    },
+    "actions_sticky_top": False
+}
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -81,6 +176,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -138,8 +234,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "")
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, 'static')
+       ]
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

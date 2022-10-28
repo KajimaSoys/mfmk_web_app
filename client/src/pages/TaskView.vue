@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs">
+  <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs" stretch>
 
     <el-tab-pane label="Основная информация">
       <div class="main_info">
@@ -76,13 +76,13 @@
             </el-form-item>
           </div>
            <el-form-item>
-             <el-button type="primary" @click="nextTabValidate($refs.main_ref)">Далее</el-button>
+             <el-button type="primary" @click="nextTabValidate($refs.main_ref, 'system')">Далее</el-button>
            </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Система">
+    <el-tab-pane label="Система" :disabled="disabled_tabs.system">
 
       <div class="system">
         <el-form
@@ -106,13 +106,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.system_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.system_ref, 'manufacturer')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Производители">
+    <el-tab-pane label="Производители" :disabled="disabled_tabs.manufacturer">
 
       <div class="manufacturer">
         <el-form
@@ -137,13 +137,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref, 'sup_parameter')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Поддерживаемый параметр">
+    <el-tab-pane label="Поддерживаемый параметр" :disabled="disabled_tabs.sup_parameter">
       <div class="sup_parameter">
         <el-form
           label-width="auto"
@@ -165,13 +165,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref, 'system_data')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Данные о системе">
+    <el-tab-pane label="Данные о системе" :disabled="disabled_tabs.system_data">
       <div class="system_data">
         <el-form
           label-width="auto"
@@ -295,13 +295,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref, 'cabinet_parameters')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Параметры шкафа и окружающей среды">
+    <el-tab-pane label="Параметры шкафа и окружающей среды" :disabled="disabled_tabs.cabinet_parameters">
       <div class="cabinet_parameters">
         <el-form
           label-width="auto"
@@ -339,13 +339,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref, 'engine_control')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Управление двигателям">
+    <el-tab-pane label="Управление двигателям" :disabled="disabled_tabs.engine_control">
       <div class="engine_control">
         <el-form
           label-width="auto"
@@ -377,13 +377,13 @@
 <!--             </el-checkbox-group>-->
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref, 'power_inputs')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Количество вводов питания">
+    <el-tab-pane label="Количество вводов питания" :disabled="disabled_tabs.power_inputs">
       <div class="power_inputs">
         <el-form
           label-width="auto"
@@ -405,13 +405,13 @@
 
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref)">Далее</el-button>
+            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref, 'additional')">Далее</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Дополнительная информация">
+    <el-tab-pane label="Дополнительная информация" :disabled="disabled_tabs.additional">
       <div class="additional">
         <el-form
           label-width="auto"
@@ -504,6 +504,18 @@ export default {
 
       tab_number: '0',
 
+      disabled_tabs:
+          {
+            system: true,
+            manufacturer: true,
+            sup_parameter: true,
+            system_data: true,
+            cabinet_parameters: true,
+            engine_control: true,
+            power_inputs: true,
+            additional: true,
+          },
+
       disabled_pump: true,
       disabled_fan: true,
       disabled_smoke: true,
@@ -575,16 +587,23 @@ export default {
   },
   methods: {
     onSubmit(){},
-    nextTabValidate(ref) {
+    nextTabValidate(ref, element) {
       console.log(this.$refs)
       ref.validate((valid=any) => {
         if(valid) {
+          this.disabled_tabs[element] = false
           this.tab_number = (parseInt(this.tab_number) + 1).toString()
         } else {
           console.log("error submit!");
           return false
         }
       })
+    },
+
+    form_validate() {
+      console.log(this.tab_number)
+      // console.log(obj)
+      // console.log(obj.$vnode.key)
     },
 
 
@@ -608,6 +627,14 @@ export default {
     },
 
     async sendData() {
+      // for (ref in this.$refs) {
+      //   ref.validate((valid=any) => {
+      //     if (!valid){
+      //       return false
+      //
+      //     }
+      //   })
+      // }
       // console.log(this.task)
       if (this.task.engine_control === "frequency") {
         if (this.task.engine_control_freq.includes('one_freq')) {
@@ -633,6 +660,17 @@ export default {
       }
 
       const data = {
+        'client': {
+          'entity_name': this.task.entity,
+          'name': this.task.name,
+          'post': this.task.post,
+          'email': this.task.mail,
+          'number': this.task.number,
+          'city': this.task.city,
+        },
+        'main_data': this.task.object_info,
+        'source': this.task.source,
+        'source_another': this.task.source_another,
         'system': this.task.system,
         'manufacturer': this.task.manufacturer,
         // 'sup_parameter': this.task.sup_parameter.values(),
@@ -774,14 +812,13 @@ export default {
 /*}*/
 
 
-.el-tabs__item {
-  /*padding-left: 45px;*/
-  /*padding-right: 85px;*/
-  padding-right: 52px;
-}
-/*.el-tabs--bottom .el-tabs__content {*/
-/*  height: 100%;*/
+/*.el-tabs__item {*/
+/*  !*padding-left: 45px;*!*/
+/*  !*padding-right: 85px;*!*/
+/*  padding-right: 52px;*/
 /*}*/
+
+
 
 .system_data .el-checkbox-button__inner {
   width: 120px;

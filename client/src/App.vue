@@ -49,6 +49,26 @@ body {
 .el-main {
   padding-bottom: 90px;
 }
+
+/*.--el-color-primary-dark-2 {*/
+/*  color: #337ecc*/
+/*}*/
+:root {
+  --el-color-primary: #000066;
+  --el-color-primary-light-3: #f89393;
+  --el-button-hover-border-color: #ffffff;
+  /*--el-button-hover-color: ;*/
+}
+
+.el-button--primary:hover{
+  background: rgb(204, 204, 224);
+  border-color: var(--el-color-primary);
+  color: #000000;
+}
+
+a {
+  color: var(--el-color-primary);
+}
 /*.el-footer {*/
 /*  position: absolute;*/
 /*  left: 0;*/

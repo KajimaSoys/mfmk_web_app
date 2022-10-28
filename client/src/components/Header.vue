@@ -1,4 +1,7 @@
 <template>
+<!--    <div class="bg-main">-->
+<!--    <img src="main-bg.jpg" alt>-->
+<!--  </div>-->
   <div class="header">
     <router-link to="/" class="logo">
       <img src="logo-white.svg" alt>
@@ -22,13 +25,15 @@
       </div>
     </div>
 
-<div class="task_link">
+    <div class="task_link">
       <router-link to="/task-form-1">
-
         Опросный лист
-
       </router-link>
-   </div>
+    </div>
+
+    <div class="call_link">
+      <a href="/">Заказать звонок</a>
+    </div>
 
 
 <!--    <router-link class="call_link" to="/">-->
@@ -54,10 +59,19 @@ export default {
 
 <style>
 
+.bg-main {
+  position: absolute;
+  /*margin-top: -128px;*/
+  /*padding: 216px 0 88px;*/
+  /*background-size: cover;*/
+}
+
 .el-header {
   --el-header-height: auto;
-  background: rgba(6, 6, 31, 0.5);
-  backdrop-filter: blur(4px);
+  background-image: url("../images/main-bg-blured.jpg");
+  background-size: cover;
+  /*background: rgba(6, 6, 31, 0.5);*/
+  /*backdrop-filter: blur(4px);*/
 }
 
 .header {
@@ -98,18 +112,40 @@ export default {
 
 .task_link {
   float: left;
-  margin-left: 5%;
+  margin-left: 20%;
 }
 
 .task_link a {
-  border: 1px;
-  border-color: #ffffff;
-    color: #ffffff;
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 7px 32px 7px;
+  position: absolute;
+}
 
+.task_link a:hover {
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .call_link {
+  float: left;
+  margin-left: 30%;
+}
 
+.call_link a {
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 7px 32px 7px;
+  position: absolute;
+}
+
+.call_link a:hover{
+  background-color: transparent;
+  color: #ffffff;
 }
 
 

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from mfmk_web_app.apps.core.models import Questionnaire
+from mfmk_web_app.apps.core.models import Questionnaire, Client
 from rest_framework import viewsets
 from rest_framework import permissions
-from mfmk_web_app.apps.core.serializers import UserSerializer, GroupSerializer, QuestionnaireSerializer
+from mfmk_web_app.apps.core.serializers import UserSerializer, GroupSerializer, QuestionnaireSerializer, ClientSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
@@ -20,5 +20,11 @@ class GroupViewSet(viewsets.ModelViewSet):
 class QuestionnaireViewSet(viewsets.ModelViewSet):
     queryset = Questionnaire.objects.all()
     serializer_class = QuestionnaireSerializer
+    permission_classes = []
+    authentication_classes = []
+
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
     permission_classes = []
     authentication_classes = []

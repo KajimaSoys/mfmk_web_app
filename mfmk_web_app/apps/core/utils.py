@@ -127,8 +127,17 @@ def single_form_fill(in_file, data, out_file):
     pdfrw.PdfWriter().write(out_file, out_pdf)
 
 
-def convert_data(instance):
+def convert_data(instance, client):
     data_dict = {
+      'source':
+            {
+                'ad': '0',
+                'search': '1',
+                'social': '2',
+                'friends': '3',
+                'work': '4',
+            },
+
       'system' :
             {
                 'heating': '0',
@@ -166,6 +175,15 @@ def convert_data(instance):
     }
 
     data = {
+        'Text1': client.entity_name,
+        'Text2': client.name,
+        'Text3': client.post,
+        'Text4': client.email,
+        'Text5': client.number,
+        'Text6': client.city,
+        'Text7': instance.main_data,
+        'Group1': data_dict['source'][instance.source] if instance.source != '' else '',
+        'Text37': instance.source_another,
         'Group2': data_dict['system'][instance.system] if instance.system != '' else '',
         # 'Group3': data_dict['sup_parameter'][instance.sup_parameter] if instance.sup_parameter != '' else '',
         'CheckBox7': True if 'pressure' in instance.sup_parameter else False,
@@ -198,11 +216,11 @@ def convert_data(instance):
     return data
 
 
-def generate_pdf(instance):
+def generate_pdf(instance, client):
     in_file = 'media/pdf_templates/template.pdf'
     out_file = f'media/questionnaire_pdf/id_{instance.id}/questionnaire_{instance.id}.pdf'
 
-    data = convert_data(instance)
+    data = convert_data(instance, client)
 
     try:
         single_form_fill(in_file, data, out_file)
