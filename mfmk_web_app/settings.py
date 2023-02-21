@@ -78,7 +78,7 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": False,
 
     # The model admin to search from the search bar, search bar omitted if excluded
-    # "search_model": "auth.User",
+    "search_model": ["core.Client", "core.Questionnaire"],
 
     "changeform_format": "horizontal_tabs",
     # TOP MENU

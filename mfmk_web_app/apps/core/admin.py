@@ -21,6 +21,8 @@ class ClientAdmin(admin.ModelAdmin):
         'orders',
     )
 
+    search_fields = ('entity_name', 'name', 'id')
+
     def orders(self, obj):
         html = ''
         questionnaire = Questionnaire.objects.filter(client_id=obj.pk)
@@ -62,6 +64,8 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     )
 
     exclude = ('path',)
+
+    search_fields = ('client__entity_name', 'client__name', 'id')
 
     def get_urls(self):
         urls = super(QuestionnaireAdmin, self).get_urls()

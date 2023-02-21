@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
 import Main from '../pages/Main'
-import About from '../pages/AboutView'
 import TaskView from '../pages/TaskView'
 
 const routes = [
@@ -22,11 +21,6 @@ const routes = [
     path: '/',
     name: 'main',
     component: Main,
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: About,
   },
   {
     path: '/task-form-1',

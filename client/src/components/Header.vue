@@ -55,50 +55,54 @@ export default {
 }
 
 .header {
-  padding: 1.5rem;
+  padding: 1.2rem;
   margin: 0.5px;
-  height: 100px;
+  height: 80px;
   color: #ffffff;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.logo img {
-  float: left;
-  width: 11%;
+.logo{
+  width: 38vw;
+  display: flex;
 }
 
 .header-contacts--mail {
-  float: left;
-  margin-left: 30%;
+  width: 10vw;
 }
 
 .header-contacts--phone {
-  float: left;
-  margin-left: 5%;
+  width: 25vw;
 }
 
 .header-contacts__sub {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 16px;
+  font-size: 0.8vw;
   line-height: 16px;
 }
 
 .link-like {
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1vw;
   line-height: 1.5;
 }
 
 .task_link {
-  float: left;
-  margin-left: 20%;
+  width: 10vw;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .task_link a {
   text-decoration: none;
   border: 1px solid #ffffff;
   color: #ffffff;
-  padding: 7px 32px 7px;
+  padding: 7px 25px 9px;
   position: absolute;
+  font-size: 0.8vw;
 }
 
 .task_link a:hover {
@@ -107,8 +111,8 @@ export default {
 }
 
 .call_link {
-  float: left;
-  margin-left: 30%;
+  display: flex;
+  align-items: center;
 }
 
 .call_link a {
@@ -117,8 +121,9 @@ export default {
   border: 1px solid #ffffff;
   background-color: #ffffff;
   color: #000000;
-  padding: 7px 32px 7px;
+  padding: 7px 25px 9px;
   position: absolute;
+  font-size: 0.8vw;
 }
 
 .call_link a:hover{

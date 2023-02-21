@@ -44,8 +44,14 @@ body {
   height: 100%;
 }
 
+.el-container {
+  position: relative;
+  min-height: 100vh;
+}
+
 .el-main {
   --el-main-padding: 0px;
+  overflow: inherit;
 }
 
 .image-box {

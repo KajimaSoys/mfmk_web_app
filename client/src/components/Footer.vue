@@ -18,14 +18,14 @@ export default {
   --el-footer-height: auto;
   background-color: #ffffff;
   position: absolute;
-  left: 0;
   bottom: 0;
   width: 100%;
 }
 
 .footer {
-  padding: 1.5rem;
+  padding: 1.4rem;
   background-color: var(--bg-color);
+  font-size: 0.8vw;
 }
 
 .footer a{

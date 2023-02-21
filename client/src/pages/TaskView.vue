@@ -1,88 +1,6 @@
 <template>
   <el-tabs v-model="tab_number" tab-position="bottom" class="demo-tabs" stretch>
-
-    <el-tab-pane label="Основная информация">
-      <div class="main_info">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="main_ref"
-          :model="task"
-          :rules="rules"
-        >
-          <div class="contacts">
-            Контактные данные
-
-            <el-form-item label="Организация" prop="entity">
-              <el-input class="w-75" type="text" v-model="task.entity" clearable/>
-            </el-form-item>
-
-            <el-form-item label="ФИО" prop="name">
-              <el-input class="w-75" type="text" v-model="task.name" clearable/>
-            </el-form-item>
-
-            <el-form-item label="Должность" prop="post">
-              <el-input class="w-75" type="text" v-model="task.post" clearable/>
-            </el-form-item>
-
-            <el-form-item label="Email" prop="mail">
-              <el-input class="w-75" type="email" v-model="task.mail" clearable/>
-            </el-form-item>
-
-            <el-form-item label="Контактный телефон" prop="number">
-              <el-input class="w-75" type="text" v-model="task.number" clearable/>
-            </el-form-item>
-
-            <el-form-item label="Город" prop="city">
-              <el-input class="w-75" type="text" v-model="task.city" clearable/>
-            </el-form-item>
-          </div>
-          <div class="source_info">
-            Основные даныне
-
-            <el-form-item label="Название и расположение объекта" prop="object_info">
-              <el-input
-                class="w-50"
-                v-model="task.object_info"
-                :rows="4"
-                type="textarea"
-                clearable
-              />
-            </el-form-item>
-
-            Как вы о нас узнали?
-
-            <el-form-item prop="source">
-              <el-radio-group v-model="task.source" size="large">
-                <el-radio-button label="ad">Реклама Яндекс / Google</el-radio-button>
-                <el-radio-button label="search">Поиск Яндекс / Google</el-radio-button>
-                <el-radio-button label="social">Социальные сети</el-radio-button>
-                <el-radio-button label="friends">Рекомендации коллег, друзей</el-radio-button>
-                <el-radio-button label="work">Уже знали о нас, работали с нами</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-
-            <el-form-item label="Другое" prop="source_another">
-              <el-input
-                class="w-50"
-                v-model="task.source_another"
-                :rows="4"
-                type="textarea"
-                clearable
-              />
-            </el-form-item>
-          </div>
-           <el-form-item>
-             <el-button type="primary" @click="nextTabValidate($refs.main_ref)">Далее</el-button> <!-- , 'system' -->
-           </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
-
-    <el-tab-pane label="Система"> <!-- :disabled="disabled_tabs.system" -->
+    <el-tab-pane label="Информация о системе">
 
       <div class="system">
         <el-form
@@ -104,27 +22,8 @@
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.system_ref)">Далее</el-button> <!-- , 'manufacturer' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
+          <el-divider/>
 
-    <el-tab-pane label="Производители"> <!-- :disabled="disabled_tabs.manufacturer" -->
-
-      <div class="manufacturer">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="manufacturer_ref"
-          :model="task"
-          :rules="rules"
-        >
           <el-form-item label="Производители" prop="manufacturer">
             <el-radio-group v-model="task.manufacturer" size="large">
               <el-radio-button label="dek">DEK</el-radio-button>
@@ -134,27 +33,8 @@
             </el-radio-group>
           </el-form-item>
 
+          <el-divider/>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.manufacturer_ref)">Далее</el-button> <!-- , 'sup_parameter' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
-
-    <el-tab-pane label="Поддерживаемый параметр"> <!-- :disabled="disabled_tabs.sup_parameter" -->
-      <div class="sup_parameter">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="sup_parameter_ref"
-          :model="task"
-          :rules="rules"
-        >
           <el-form-item label="Поддерживаемый параметр" prop="sup_parameter">
             <el-checkbox-group v-model="task.sup_parameter" size="large">
               <el-checkbox-button v-for="parameter in sup_paramater_choices" :key="parameter.key" :label="parameter.key">
@@ -163,27 +43,10 @@
             </el-checkbox-group>
           </el-form-item>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.sup_parameter_ref)">Далее</el-button> <!-- , 'system_data' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
+          <el-divider/>
 
-    <el-tab-pane label="Данные о системе"> <!-- :disabled="disabled_tabs.system_data" -->
-      <div class="system_data">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="engine_data_ref"
-          :model="task"
-          :rules="rules"
-        >
           <el-form-item label="Объем теплоносителя в системе">
+            <div class="system_data">
               <div class="system_data_element">
                 <el-checkbox-button v-model="task.volume_pump" @change="disabled_pump = !disabled_pump">
                   Насос
@@ -215,6 +78,7 @@
 
                 <el-input v-model="task.volume_gate_valves_mark" :disabled="disabled_gate" placeholder="Маркировка" clearable/>
               </div>
+            </div>
           </el-form-item>
 
           <el-divider/>
@@ -293,70 +157,36 @@
             </div>
           </el-form-item>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_data_ref)">Далее</el-button> <!-- , 'cabinet_parameters' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
+          <el-divider/>
 
-    <el-tab-pane label="Параметры шкафа и окружающей среды"> <!-- :disabled="disabled_tabs.cabinet_parameters" -->
-      <div class="cabinet_parameters">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="cabinet_parameters_ref"
-          :model="task"
-          :rules="rules"
-        >
-          <el-form-item class="big_text" label="Параметры шкафа и окружающей среды">
-            <el-radio-group v-model="task.cabinet_parameters" size="large">
-              <el-radio-button label="uhl4">УХЛ4 (T окружающего воздуха не более +40 °С и не ниже 0 °С, средняя за 24 ч – не более 35 °С)</el-radio-button>
-              <el-radio-button label="uhl2">УХЛ2 (-40 °С; +40 °С под навесом от воздействия осадков и солнечных лучей)</el-radio-button>
-              <el-radio-button label="uhl1">УХЛ1 (-40 °С; +40 °С на открытом воздухе)</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
+          <div class="cabinet_parameters">
+            <el-form-item class="big_text" label="Параметры шкафа и окружающей среды">
+              <el-radio-group v-model="task.cabinet_parameters" size="large">
+                <el-radio-button label="uhl4">УХЛ4 (T окружающего воздуха не более +40 °С и не ниже 0 °С, средняя за 24 ч – не более 35 °С)</el-radio-button>
+                <el-radio-button label="uhl2">УХЛ2 (-40 °С; +40 °С под навесом от воздействия осадков и солнечных лучей)</el-radio-button>
+                <el-radio-button label="uhl1">УХЛ1 (-40 °С; +40 °С на открытом воздухе)</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
 
-         <el-divider/>
+            <el-divider/>
 
-         <el-form-item class="big_text" label="Размер шкафа"/>
+            <el-form-item class="big_text" label="Размер шкафа"/>
 
-          <el-form-item label="Ширина шкафа, мм">
-            <el-input class="w-25" type="text" v-model="task.cabinet_width" clearable/>
-          </el-form-item>
+            <el-form-item label="Ширина шкафа, мм">
+              <el-input class="w-25" type="text" v-model="task.cabinet_width" clearable/>
+            </el-form-item>
 
-          <el-form-item label="Высота шкафа, мм">
-            <el-input class="w-25" type="text" v-model="task.cabinet_height" clearable/>
-          </el-form-item>
+            <el-form-item label="Высота шкафа, мм">
+              <el-input class="w-25" type="text" v-model="task.cabinet_height" clearable/>
+            </el-form-item>
 
-          <el-form-item label="Гулбина шкафа, мм">
-            <el-input class="w-25" type="text" v-model="task.cabinet_depth" clearable/>
-          </el-form-item>
+            <el-form-item label="Гулбина шкафа, мм">
+              <el-input class="w-25" type="text" v-model="task.cabinet_depth" clearable/>
+            </el-form-item>
+          </div>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.cabinet_parameters_ref)">Далее</el-button> <!-- , 'engine_control' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
+          <el-divider/>
 
-    <el-tab-pane label="Управление двигателям"> <!-- :disabled="disabled_tabs.engine_control" -->
-      <div class="engine_control">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="engine_control_ref"
-          :model="task"
-          :rules="rules"
-        >
           <el-form-item label="Управление двигателям" prop="engine_control">
             <el-radio-group v-model="task.engine_control" size="large">
               <el-radio-button label="direct">Прямой пуск</el-radio-button>
@@ -367,34 +197,8 @@
             </el-radio-group>
           </el-form-item>
 
-<!--             <el-checkbox-group v-model="task.engine_control_freq" size="large" :disabled="disabled_freq">-->
-<!--                     <el-checkbox-button key="one_freq" label="one_freq">-->
-<!--                       Один преобразователь частоты-->
-<!--                     </el-checkbox-button>-->
-<!--                     <el-checkbox-button key="for_each" label="for_each">-->
-<!--                       ПЧ на каждый электродвигатель-->
-<!--                     </el-checkbox-button>-->
-<!--             </el-checkbox-group>-->
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.engine_control_ref)">Далее</el-button> <!-- , 'power_inputs' -->
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-tab-pane>
+          <el-divider/>
 
-    <el-tab-pane label="Количество вводов питания"> <!-- :disabled="disabled_tabs.power_inputs" -->
-      <div class="power_inputs">
-        <el-form
-          label-width="auto"
-          label-position="top"
-          require-asterisk-position="right"
-          status-icon
-          size="large"
-          ref="power_inputs_ref"
-          :model="task"
-          :rules="rules"
-        >
           <el-form-item label="Количество вводов питания" prop="power_inputs">
             <el-radio-group v-model="task.power_inputs" size="large">
               <el-radio-button label="two_power_ats">Два ввода питания (с АВР)</el-radio-button>
@@ -403,40 +207,115 @@
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item>
-            <el-button @click="previousTab">Назад</el-button>
-            <el-button type="primary" @click="nextTabValidate($refs.power_inputs_ref)">Далее</el-button> <!-- , 'additional' -->
-          </el-form-item>
+          <div class="next-button">
+            <el-form-item>
+              <el-button type="primary" @click="nextTabValidate($refs.system_ref)">Далее</el-button> <!-- , 'additional' -->
+            </el-form-item>
+          </div>
+
         </el-form>
       </div>
     </el-tab-pane>
 
-    <el-tab-pane label="Дополнительная информация"> <!-- :disabled="disabled_tabs.additional" -->
-      <div class="additional">
+
+    <el-tab-pane label="Контактная информация">
+      <div class="main_info">
         <el-form
           label-width="auto"
           label-position="top"
           require-asterisk-position="right"
           status-icon
           size="large"
-          ref="add_information_ref"
+          ref="main_ref"
           :model="task"
           :rules="rules"
         >
-          <el-form-item label="Дополнительная информация" prop="add_information">
-            <el-input
-              v-model="task.add_information"
-              :rows="4"
-              type="textarea"
-              placeholder="Введите комментарий.."
-              clearable
-            />
-          </el-form-item>
+          <div class="contacts">
+            Контактные данные
 
+            <el-form-item label="Организация" prop="entity">
+              <el-input class="w-75" type="text" v-model="task.entity" clearable/>
+            </el-form-item>
+
+            <el-form-item label="ФИО" prop="name">
+              <el-input class="w-75" type="text" v-model="task.name" clearable/>
+            </el-form-item>
+
+            <el-form-item label="Должность" prop="post">
+              <el-input class="w-75" type="text" v-model="task.post" clearable/>
+            </el-form-item>
+
+            <el-form-item label="Email" prop="mail">
+              <el-input class="w-75" type="email" v-model="task.mail" clearable/>
+            </el-form-item>
+
+            <el-form-item label="Контактный телефон" prop="number">
+              <el-input class="w-75" type="text" v-model="task.number" clearable/>
+            </el-form-item>
+
+            <el-form-item label="Город" prop="city">
+              <el-input class="w-75" type="text" v-model="task.city" clearable/>
+            </el-form-item>
+          </div>
+          <div class="source_info">
+            Основные даныне
+
+            <el-form-item label="Название и расположение объекта" prop="object_info">
+              <el-input
+                class="w-50"
+                v-model="task.object_info"
+                :rows="4"
+                type="textarea"
+                clearable
+              />
+            </el-form-item>
+
+            Как вы о нас узнали?
+
+            <el-form-item prop="source">
+              <el-radio-group v-model="task.source" size="large">
+                <el-radio-button label="ad">Реклама Яндекс / Google</el-radio-button>
+                <el-radio-button label="search">Поиск Яндекс / Google</el-radio-button>
+                <el-radio-button label="social">Социальные сети</el-radio-button>
+                <el-radio-button label="friends">Рекомендации коллег, друзей</el-radio-button>
+                <el-radio-button label="work">Уже знали о нас, работали с нами</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item label="Другое" prop="source_another">
+              <el-input
+                class="w-50"
+                v-model="task.source_another"
+                :rows="4"
+                type="textarea"
+                clearable
+              />
+            </el-form-item>
+
+
+            <el-divider/>
+
+            <div class="additional">
+              <el-form-item label="Дополнительная информация" prop="add_information">
+                <el-input
+                  v-model="task.add_information"
+                  :rows="4"
+                  type="textarea"
+                  placeholder="Введите комментарий.."
+                  clearable
+                />
+              </el-form-item>
+            </div>
+
+          </div>
+
+          <div class="next-button">
           <el-form-item>
             <el-button @click="previousTab">Назад</el-button>
             <el-button type="primary" @click="sendData">Отправить</el-button>
           </el-form-item>
+          </div>
+
         </el-form>
       </div>
     </el-tab-pane>
@@ -504,17 +383,6 @@ export default {
 
       tab_number: '0',
 
-      // disabled_tabs:
-      //     {
-      //       system: false,
-      //       manufacturer: false,
-      //       sup_parameter: false,
-      //       system_data: false,
-      //       cabinet_parameters: false,
-      //       engine_control: false,
-      //       power_inputs: false,
-      //       additional: false,
-      //     },
 
       disabled_pump: true,
       disabled_fan: true,
@@ -752,10 +620,14 @@ export default {
 
 
 <style>
+:root {
+  --el-font-size-base: 0.8vw;
+}
+
 .demo-tabs {
   padding: 20px;
   background-color: #ffffff;
-  height: 950px;
+  /*height: 950px;*/
 }
 
 .demo-tabs > .el-tabs__content {
@@ -783,9 +655,13 @@ export default {
 .power_inputs .el-form-item__label,
 .additional .el-form-item__label {
   padding-top: 12px;
-  font-size: 32px;
+  font-size: 1.5vw;
   font-weight: 600;
   color: #6b778c;
+}
+
+.el-radio-button__inner{
+  min-width: 130px;
 }
 
 .el-radio-group {
@@ -797,34 +673,63 @@ export default {
 }
 
 .el-tabs--bottom .el-tabs__header.is-bottom {
-  position: absolute;
+  position: fixed;
   width: 98%;
-  bottom: 5rem;
-  padding: 2rem;
+  bottom: 0rem;
+  padding: 1rem 2rem 1rem 2rem;
+  background-image: linear-gradient(to bottom, rgba(255,0,0,0), rgb(255 255 255) 70%);
 }
 
-.system_data .el-checkbox-button__inner {
-  width: 120px;
-}
+/*.system_data:deep(.el-checkbox-button__inner) {*/
+/*  width: 100px;*/
+/*}*/
 
-.system_data .el-input {
-  width: 60%;
-}
+/*.system_data .el-input {*/
+/*  width: 40%;*/
+/*}*/
 
-.system_data .el-form-item__content {
-  margin-top: 30px;
-  display: block;
+/*.system_data:deep(.el-form-item__content) {*/
+/*  margin-top: 30px;*/
+/*  display: block;*/
+/*  flex-direction: column;*/
+/*  align-items: flex-start;*/
+/*}*/
+
+/*.system_data .zero_margin .el-form-item__content {*/
+/*  margin-top: 0px;*/
+/*}*/
+
+/*.system_data_element {*/
+/*  width: 40%;*/
+/*}*/
+
+.system_data {
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 
-.system_data .zero_margin .el-form-item__content {
-  margin-top: 0px;
+.system_data_element{
+  display: flex;
+  margin-bottom: 10px;
+  align-items: flex-end;
 }
 
-.system_data_element {
-  width: 40%;
+.system_data_element > label {
+  margin-bottom: 0!important;
 }
+
+.system_data_element > .el-input.el-input--large.is-disabled.el-input--suffix, .system_data_element > .el-input.el-input--large.el-input--suffix {
+  font-size: var(--el-font-size-base);
+  width: 390px!important;
+  height: 38px!important;
+  min-height: 38px!important;
+}
+
+span.el-checkbox-button__inner {
+  min-width: 130px;
+  width: 130px;
+}
+
 
 
 .cabinet_parameters .el-radio-group {
@@ -844,6 +749,10 @@ export default {
 
 }
 
+.cabinet_parameters .el-form-item label {
+  font-size: 14px;
+}
+
 .el-row:last-child {
   margin-bottom: 0;
 }
@@ -859,11 +768,25 @@ export default {
 
 .engine-number{
   text-align: center;
-  padding-right: 65px;
+  /*padding-right: 65px;*/
+}
+
+.el-col-2 {
+    max-width: 7.333333%;
+    flex: 0 0 7.333333%;
 }
 
 .additional .el-textarea__inner {
-  width: 30%;
+  width: 50%;
+}
+
+.next-button {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+}
+
+.main_info .el-divider.el-divider--horizontal {
+  width: 50%;
 }
 
 </style>
