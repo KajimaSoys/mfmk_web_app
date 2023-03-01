@@ -567,7 +567,7 @@ export default {
 
 <style>
 :root {
-     --el-font-size-base: 0.8vw;
+     --el-font-size-base: 0.8rem;
 }
  .demo-tabs {
      padding: 20px;

@@ -23,7 +23,7 @@ export default {
  .footer {
      padding: 1.4rem;
      background-color: var(--bg-color);
-     font-size: 0.8vw;
+     font-size: 0.8rem;
 }
  .footer a{
      padding-left: 20px;

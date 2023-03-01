@@ -75,16 +75,24 @@ class QuestionnaireAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.generate_pdf),
                 name='generate_pdf',
             ),
+            url(
+                r'^(?P<id>.+)/generate_waybill/$',
+                self.admin_site.admin_view(self.generate_waybill),
+                name='generate_waybill',
+            ),
         ]
         return custom_urls + urls
 
     def account_actions(self, obj):
         return format_html(
-            '<a class="btn btn-outline-primary" href="{}">Скачать</a>',
+            '<a class="btn btn-outline-primary btn-user-pdf" href="{}">Опросный лист</a>'
+            '<p></p>'
+            '<a class="btn btn-outline-success btn-user-waybill" href="{}">Смета</a>',
             reverse('admin:generate_pdf', args=[obj.pk]),
+            reverse('admin:generate_waybill',  args=[obj.pk])
         )
 
-    account_actions.short_description = 'Опросный лист'
+    account_actions.short_description = 'Документы'
     account_actions.allow_tags = True
 
     def generate_pdf(self, request, id, *args, **kwargs):
@@ -92,7 +100,29 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         if os.path.exists(path):
             with open(path, 'rb') as pdf:
                 response = HttpResponse(pdf.read(), content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=questionnaire_' + id + '.pdf'
+                response['Content-Disposition'] = f'attachment; filename=questionnaire_{id}.pdf'
                 return response
                 pdf.closed
 
+    def generate_waybill(self, request, id, *args, **kwargs):
+        path = f'{Questionnaire.objects.get(id=id).path}/waybill_{id}.xlsm'
+        if os.path.exists(path):
+            with open(path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = f'inline; filename=waybill_{id}.xlsm'
+                return response
+
+
+@admin.register(PriceList)
+class PriceListAdmin(admin.ModelAdmin):
+    model = PriceList
+
+    list_display = (
+        'name',
+        'vendor_code',
+        'manufacturer',
+        'get_price',
+        'type',
+    )
+
+    search_fields = ('name', 'vendor_code', 'id', 'manufacturer')

@@ -2,7 +2,9 @@ from django.db import models
 import json, os
 from django.contrib.postgres.fields import ArrayField
 from mfmk_web_app.apps.core.utils import *
+from mfmk_web_app.apps.core.waybill_engine import *
 from multiselectfield import MultiSelectField
+from itertools import groupby
 
 class Client(models.Model):
     class Meta:
@@ -151,13 +153,13 @@ class Questionnaire(models.Model):
         """Создание директории клиента при сохранении"""
         path = f'id_{self.id}'
         try:
-            os.mkdir(f'media/questionnaire_pdf/{path}')
-            print(f'media/questionnaire_pdf/{path}')
-            print(f"Directory media/questionnaire_pdf/{path} created!")
+            os.mkdir(f'media/questionnaire/{path}')
+            print(f'media/questionnaire/{path}')
+            print(f"Directory media/questionnaire/{path} created!")
         except FileExistsError:
-            print(f"Directory media/questionnaire_pdf/{path} already exists")
+            print(f"Directory media/questionnaire/{path} already exists")
 
-        Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnaire_pdf/{path}')
+        Questionnaire.objects.filter(id=self.id).update(path=f'media/questionnaire/{path}')
         # client = Client.objects.get(id=self.client_id)
 
         if generate_pdf(self, self.client):
@@ -165,7 +167,110 @@ class Questionnaire(models.Model):
         else:
             print('An error occurred while generating the pdf document :(')
 
+        price_positions = self.handle_data()
+
+        if generate_waybill(self, price_positions):
+            print('Waybill file generated successfully!')
+        else:
+            print('An error occurred while generating the waybill document :(')
+
 
     def save(self, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)
         self.update_model()
+
+    def handle_data(self):
+        positions = PriceList.objects.filter(type__in=['tires', 'signalfittings', 'relays', 'consumables',])
+        positions_by_type = {}
+        if (self.system == 'firefighting') & (self.manufacturer == 'dek'):
+            if 'level' in self.sup_parameter:
+                if self.volume_pump:
+                    if (self.engine_data[0][0] == '30') & (self.engine_data[0][1] == '30') & (self.engine_data[0][2] == '0,75'):
+                        if self.cabinet_parameters == 'uhl4':
+                            if (self.cabinet_width == '1000') & (self.cabinet_height == '600') & (self.cabinet_depth == '300'):
+                                if (self.engine_control == 'smooth') & (self.power_inputs == 'two_power_ats'):
+                                    vendors_code = [
+                                        'MC1006030',
+                                        '17011DEK',
+                                        '21241DEK',
+                                        '21280DEK',
+                                        '21226DEK',
+                                        '21271DEK',
+                                        '22001DEK',
+                                        '24105DEK',
+                                        'ESQ-GS7-030',
+                                        'MDR-60-24',
+                                        'EDS-205A',
+                                        '270130',
+                                        '22008DEK',
+                                        '24105DEK',
+                                        '24118DEK',
+                                        'MFK10',
+                                        '820218',
+                                        '820271',
+                                        'PBO-AD33',
+                                        '12301DEK'
+                                    ]
+
+                                    names_without_vendor = [
+                                        'ОПЛК Vision V570 (3xAI, 18xDI, 17xDO)',
+                                        'FLC'
+                                    ]
+
+                                    positions = positions\
+                                        .union(PriceList.objects.filter(vendor_code__in=vendors_code))\
+                                        .union(PriceList.objects.filter(name__in=names_without_vendor))
+
+        positions = positions.order_by('type',)
+        for key, group in groupby(positions, lambda x: x.type):
+            positions_by_type[key] = list(group)
+
+        return positions_by_type
+
+
+
+
+class PriceList(models.Model):
+    class Meta:
+        verbose_name = "Позиция"
+        verbose_name_plural = "Прайс-лист"
+        ordering = ('type',)
+
+    id = models.BigAutoField(verbose_name="Идентификатор", primary_key=True)
+
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Дата изменения", auto_now=True)
+
+    type_choices = (
+        ('closet', 'Шкаф'),
+        ('switching', 'Коммутационное оборудование'),
+        ('softstarter', 'Пч и упп'),
+        ('controllers', 'Контроллеры'),
+        ('avr', 'Авр'),
+        ('tires', 'Шины'),
+        ('signalfittings', 'Сигнальная арматура и переключатели'),
+        ('relays', 'Клеммы и реле'),
+        ('consumables', 'Расходные материалы'),
+    )
+
+    type = models.CharField(verbose_name="Тип", choices=type_choices, max_length=30)
+    name = models.CharField(verbose_name="Название", max_length=300, blank=True)
+    vendor_code = models.CharField(verbose_name="Артикул", max_length=100, blank=True)
+    manufacturer = models.CharField(verbose_name="Производитель", max_length=100, blank=True)
+    price = models.FloatField(verbose_name="Цена без НДС", blank=True)
+
+    currency_choices = (
+        ('rub', 'руб.'),
+        ('usd', '$'),
+        ('eur', '€'),
+    )
+
+    currency = models.CharField(verbose_name="Валюта", choices=currency_choices, max_length=30, default='rub')
+
+    def __str__(self):
+        return self.name
+
+    def get_price(self):
+        return f'{self.price}{self.get_currency_display()}'
+
+    get_price.short_description = "Цена без НДС"

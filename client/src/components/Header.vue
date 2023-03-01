@@ -64,12 +64,12 @@ export default {
 }
  .header-contacts__sub {
      color: rgba(255, 255, 255, 0.5);
-     font-size: 0.8vw;
+     font-size: 0.8rem;
      line-height: 16px;
 }
  .link-like {
      cursor: pointer;
-     font-size: 1vw;
+     font-size: 1rem;
      line-height: 1.5;
 }
  .task_link {
@@ -85,7 +85,7 @@ export default {
      color: #ffffff;
      padding: 7px 25px 9px;
      position: absolute;
-     font-size: 0.8vw;
+     font-size: 0.8rem;
 }
  .task_link a:hover {
      background-color: #ffffff;
@@ -103,7 +103,7 @@ export default {
      color: #000000;
      padding: 7px 25px 9px;
      position: absolute;
-     font-size: 0.8vw;
+     font-size: 0.8rem;
 }
  .call_link a:hover{
      background-color: transparent;
