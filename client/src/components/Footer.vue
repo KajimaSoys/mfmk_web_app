@@ -1,6 +1,6 @@
 <template>
    <div class="footer">
-      © 2022 Компания МФМК
+      © 2023 Компания МФМК
       <a href="https://mfmc.ru/agreement/">Политика обработки данных</a>
    </div>
 </template>

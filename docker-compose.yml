@@ -1,0 +1,62 @@
+  version: '3.8'
+
+  services:
+    django:
+      build:
+        context: .
+      container_name: django-mfmk
+      environment:
+        - SQL_DB=${DB_NAME}
+        - SQL_USER=${DB_USER}
+        - SQL_PASSWORD=${DB_PASSWORD}
+        - SQL_HOST=${DB_HOST}
+        - SQL_PORT=${DB_PORT}
+        - SECRET_KEY=${SECRET_KEY}
+        - DEBUG=${DEBUG}
+      volumes:
+        - ./:/app
+      depends_on:
+        - db
+      networks:
+        - mfmk_network
+
+    vue:
+      build: ./client
+      container_name: vue-mfmk
+      volumes:
+        - ./client:/app
+      networks:
+        - mfmk_network
+
+    nginx:
+      build: ./nginx
+      container_name: nginx-mfmk
+      ports:
+        - "80:80"
+      depends_on:
+        - django
+        - vue
+      networks:
+        - mfmk_network
+      volumes:
+        - ./static:/app/static
+
+    db:
+      image: postgres:13
+      container_name: db-mfmk
+      restart: always
+      environment:
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - db_data:/var/lib/postgresql/data
+        - ./requester.sql:/requester.sql
+      networks:
+        - mfmk_network
+
+  volumes:
+    db_data:
+
+  networks:
+    mfmk_network:
